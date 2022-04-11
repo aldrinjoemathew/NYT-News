@@ -42,6 +42,7 @@ fun LoginScreen(navigationAction: NytNavigationAction, viewModel: LoginViewModel
     ) {
         when (loginResponse) {
             is ResponseIo.Data -> {
+                scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
                 navigationAction.navigateToHome()
             }
             is ResponseIo.Error, is ResponseIo.Loading, ResponseIo.Empty -> {

@@ -35,6 +35,7 @@ fun SignupScreen(navigationAction: NytNavigationAction, viewModel: SignupViewMod
 
     when (signupResponse) {
         is ResponseIo.Data -> {
+            scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
             navigationAction.navigateToHome()
         }
         is ResponseIo.Error, is ResponseIo.Loading, ResponseIo.Empty -> {
