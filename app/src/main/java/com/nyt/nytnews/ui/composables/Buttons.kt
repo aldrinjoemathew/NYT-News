@@ -231,6 +231,7 @@ fun ProgressButton(
     modifier: Modifier = Modifier,
     text: String,
     loading: Boolean = false,
+    enabled: Boolean,
     onClick: (Boolean) -> Unit
 ) {
     Box(
@@ -244,7 +245,11 @@ fun ProgressButton(
             .clickable {
                 onClick(loading)
             }
-            .background(MaterialTheme.colors.primary)
+            .background(
+                if (enabled) MaterialTheme.colors.primary else Color.Gray.copy(
+                    LocalContentAlpha.current
+                )
+            )
             .padding(BaseSeparation)
             .animateContentSize(tween()),
         contentAlignment = Alignment.Center
@@ -260,7 +265,7 @@ fun ProgressButton(
                 modifier = modifier,
                 text = text,
                 style = TextStyle(
-                    color = MaterialTheme.colors.onPrimary,
+                    color = if (enabled) MaterialTheme.colors.onPrimary else Color.DarkGray,
                     fontSize = TextSizeNormal
                 ),
                 textAlign = TextAlign.Center
