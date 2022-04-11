@@ -9,6 +9,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.rememberNavController
 import com.nyt.nytnews.ui.navigation.NytNavigationAction
 import com.nyt.nytnews.ui.navigation.NytNavigationGraph
+import com.nyt.nytnews.ui.theme.NytTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -18,7 +19,9 @@ class StarterActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         installSplashScreen()
         setContent {
-            NytApp()
+            NytTheme {
+                NytApp()
+            }
         }
     }
 }
