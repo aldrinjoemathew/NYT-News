@@ -1,6 +1,7 @@
 package com.nyt.nytnews.ui.screens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -10,13 +11,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.nyt.nytnews.R
 import com.nyt.nytnews.ui.composables.ProgressButton
 import com.nyt.nytnews.ui.navigation.NytNavigationAction
+import com.nyt.nytnews.ui.theme.TextSizeNormalPlus
 import com.nyt.nytnews.ui.viewmodel.LoginViewModel
 import com.nyt.nytnews.utils.ResponseIo
 import kotlinx.coroutines.launch
@@ -51,6 +55,7 @@ fun LoginScreen(navigationAction: NytNavigationAction, viewModel: LoginViewModel
                     isValidEmail = viewModel.isValidEmail(email),
                     isValidPassword = viewModel.isValidPassword(password),
                     onLogin = { viewModel.login(email, password) },
+                    onSignup = navigationAction.navigateToSignup
                 )
                 if (loginResponse is ResponseIo.Error) {
                     LaunchedEffect(key1 = scaffoldState.snackbarHostState, block = {
@@ -81,7 +86,8 @@ private fun LoginView(
     onPasswordChanged: (String) -> Unit,
     isValidEmail: Boolean,
     isValidPassword: Boolean,
-    onLogin: () -> Unit
+    onLogin: () -> Unit,
+    onSignup: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -126,6 +132,15 @@ private fun LoginView(
                 if (!isLoading && isValidEmail && isValidPassword) onLogin()
             },
             loading = isLoading
+        )
+        Spacer(modifier = Modifier.size(20.dp))
+        Text(
+            text = "Click here to signup!",
+            modifier = Modifier.clickable(enabled = !isLoading, onClick = onSignup),
+            style = TextStyle(
+                textDecoration = TextDecoration.Underline,
+                fontSize = TextSizeNormalPlus
+            )
         )
     }
 }

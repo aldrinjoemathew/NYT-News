@@ -6,4 +6,7 @@ class NytNavigationAction(navController: NavController) {
     val navigateToHome: () -> Unit = {
 
     }
+    val navigateToSignup: () -> Unit = {
+        navController.navigate(NavRoutes.SIGNUP)
+    }
 }

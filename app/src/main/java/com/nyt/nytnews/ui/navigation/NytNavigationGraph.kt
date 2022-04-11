@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.nyt.nytnews.ui.screens.LoginScreen
+import com.nyt.nytnews.ui.screens.SignupScreen
 
 @Composable
 fun NytNavigationGraph(
@@ -15,6 +16,9 @@ fun NytNavigationGraph(
     NavHost(navController = navController, startDestination = NavRoutes.LOGIN) {
         composable(NavRoutes.LOGIN) {
             LoginScreen(navigationAction = navigationAction, viewModel = hiltViewModel())
+        }
+        composable(NavRoutes.SIGNUP) {
+            SignupScreen(navigationAction = navigationAction, viewModel = hiltViewModel())
         }
     }
 }
