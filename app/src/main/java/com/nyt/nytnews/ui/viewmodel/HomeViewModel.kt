@@ -13,20 +13,12 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(private val newsRepository: NewsRepository): ViewModel() {
+class HomeViewModel @Inject constructor(private val newsRepository: NewsRepository) : ViewModel() {
 
-    private val _newsArticles =  MutableStateFlow<List<NewsArticle>>(emptyList())
-    val newsArticles = _newsArticles.asStateFlow()
+    private val _newsArticles = newsRepository.newsFlow()
+    val newsArticles = _newsArticles
 
     init {
-        viewModelScope.launch {
-            try {
-                val response = newsRepository.loadNews(1)
-                Timber.d(response.toString())
-                _newsArticles.update { response.newsArticles }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
+
     }
 }

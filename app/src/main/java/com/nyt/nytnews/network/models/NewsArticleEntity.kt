@@ -8,7 +8,7 @@ data class NewsArticleEntity(
     @SerialName("abstract") val abstractContent: String,
     @SerialName("web_url") val url: String,
     @SerialName("lead_paragraph") val leadContent: String,
-    @SerialName("source") val newsSource: String,
+    @SerialName("source") val newsSource: String = "",
     @SerialName("multimedia") val images: List<MultiMediaEntity>,
     @SerialName("headline") val headline: HeadlineEntity,
 )

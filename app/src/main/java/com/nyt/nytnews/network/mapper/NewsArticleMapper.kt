@@ -11,7 +11,7 @@ class NewsArticleMapper : EntityMapper<NewsArticleEntity, NewsArticle> {
         return NewsArticle(
             abstractContent = entity.abstractContent,
             headline = entity.headline.mainHeadline,
-            imageUrl = entity.images.firstOrNull()?.imageUrl,
+            imageUrl = entity.images.firstOrNull()?.imageUrl?.let { url -> "https://www.nytimes.com/$url" },
             leadContent = entity.leadContent,
             newsSource = entity.newsSource,
             url = entity.url
@@ -25,7 +25,8 @@ class NewsArticleMapper : EntityMapper<NewsArticleEntity, NewsArticle> {
             leadContent = domain.leadContent,
             headline = HeadlineEntity(domain.headline),
             abstractContent = domain.abstractContent,
-            images = domain.imageUrl?.let { listOf(MultiMediaEntity(domain.imageUrl)) } ?: emptyList()
+            images = domain.imageUrl?.let { listOf(MultiMediaEntity(domain.imageUrl)) }
+                ?: emptyList()
         )
     }
 
