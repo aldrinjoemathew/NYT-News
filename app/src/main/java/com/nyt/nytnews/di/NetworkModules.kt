@@ -1,14 +1,7 @@
 package com.nyt.nytnews.di
 
-import android.content.Context
-import android.content.SharedPreferences
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.nyt.nytnews.BuildConfig
-import com.nyt.nytnews.NytApplication
-import com.nyt.nytnews.db.NytDatabase
-import com.nyt.nytnews.db.dao.UserDao
-import com.nyt.nytnews.db.repository.UserRepo
-import com.nyt.nytnews.db.repository.UserRepoImpl
 import com.nyt.nytnews.network.NytApiService
 import com.nyt.nytnews.network.mapper.NewsArticleMapper
 import com.nyt.nytnews.network.mapper.NewsResponseMapper
@@ -19,7 +12,6 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
@@ -29,44 +21,6 @@ import retrofit2.Converter
 import retrofit2.Retrofit
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
-
-@Module
-@InstallIn(SingletonComponent::class)
-class AppModule {
-
-    @Singleton
-    @Provides
-    fun provideApplication(@ApplicationContext app: Context): NytApplication = app as NytApplication
-
-    @Provides
-    fun provideSharedPreferences(application: NytApplication): SharedPreferences =
-        application.getSharedPreferences(
-            "NytNews",
-            Context.MODE_PRIVATE
-        )
-}
-
-@InstallIn(SingletonComponent::class)
-@Module
-class DatabaseModule {
-    @Provides
-    fun provideUserDao(appDatabase: NytDatabase): UserDao {
-        return appDatabase.userDao()
-    }
-
-    @Provides
-    @Singleton
-    fun provideAppDatabase(@ApplicationContext appContext: Context): NytDatabase {
-        return NytDatabase.buildDatabase(appContext)
-    }
-}
-
-@Module
-@InstallIn(ViewModelComponent::class)
-abstract class RepositoryModule {
-    @Binds
-    abstract fun providesUserRepository(userRepoImpl: UserRepoImpl): UserRepo
-}
 
 @Module
 @InstallIn(SingletonComponent::class)
