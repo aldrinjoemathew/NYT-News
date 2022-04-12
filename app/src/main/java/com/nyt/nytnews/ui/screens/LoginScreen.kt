@@ -24,6 +24,7 @@ import com.nyt.nytnews.ui.theme.TextSizeNormalPlus
 import com.nyt.nytnews.ui.viewmodel.LoginViewModel
 import com.nyt.nytnews.utils.ResponseIo
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @Composable
 fun LoginScreen(navigationAction: NytNavigationAction, viewModel: LoginViewModel) {
@@ -42,8 +43,10 @@ fun LoginScreen(navigationAction: NytNavigationAction, viewModel: LoginViewModel
     ) {
         when (loginResponse) {
             is ResponseIo.Data -> {
-                scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
-                navigationAction.navigateToHome()
+                LaunchedEffect(key1 = loginResponse, block = {
+                    scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
+                    navigationAction.navigateToHome()
+                })
             }
             is ResponseIo.Error, is ResponseIo.Loading, ResponseIo.Empty -> {
                 LoginView(

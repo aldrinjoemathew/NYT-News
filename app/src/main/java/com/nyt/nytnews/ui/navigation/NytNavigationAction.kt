@@ -4,7 +4,11 @@ import androidx.navigation.NavController
 
 class NytNavigationAction(navController: NavController) {
     val navigateToHome: () -> Unit = {
-
+        navController.navigate(NavRoutes.HOME) {
+            popUpTo(NavRoutes.LOGIN) {
+                inclusive = true
+            }
+        }
     }
     val navigateToSignup: () -> Unit = {
         navController.navigate(NavRoutes.SIGNUP)

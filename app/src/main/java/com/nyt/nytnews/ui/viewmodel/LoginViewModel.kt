@@ -11,6 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -21,6 +22,14 @@ class LoginViewModel @Inject constructor(private val userRepo: UserRepo) : ViewM
 
     private val _loginResponse = MutableStateFlow<ResponseIo<User>>(ResponseIo.Empty)
     val loginResponse = _loginResponse.asStateFlow()
+
+    init {
+        viewModelScope.launch {
+            _loginResponse.collect {
+                Timber.d("$it")
+            }
+        }
+    }
 
     fun login(email: String, password: String) {
         viewModelScope.launch(Dispatchers.IO) {
