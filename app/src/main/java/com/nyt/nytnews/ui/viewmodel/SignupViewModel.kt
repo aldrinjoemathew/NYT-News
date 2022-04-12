@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nyt.nytnews.db.models.User
 import com.nyt.nytnews.db.repository.UserRepo
+import com.nyt.nytnews.session.SessionManager
 import com.nyt.nytnews.utils.ResponseIo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -16,7 +17,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SignupViewModel @Inject constructor(private val userRepo: UserRepo) : ViewModel() {
+class SignupViewModel @Inject constructor(
+    private val userRepo: UserRepo,
+    private val sessionManager: SessionManager
+) : ViewModel() {
 
     private val _signupResponse = MutableStateFlow<ResponseIo<User>>(ResponseIo.Empty)
     val signupResponse = _signupResponse.asStateFlow()
@@ -31,6 +35,7 @@ class SignupViewModel @Inject constructor(private val userRepo: UserRepo) : View
                     email = email,
                     password = password,
                 )!!
+                sessionManager.user = user
                 _signupResponse.update { ResponseIo.Data(user) }
             } catch (e: Exception) {
                 e.printStackTrace()

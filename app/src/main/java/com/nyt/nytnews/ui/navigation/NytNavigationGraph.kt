@@ -14,7 +14,7 @@ fun NytNavigationGraph(
     navController: NavHostController,
     navigationAction: NytNavigationAction,
 ) {
-    NavHost(navController = navController, startDestination = NavRoutes.HOME) {
+    NavHost(navController = navController, startDestination = NavRoutes.LOGIN) {
         composable(NavRoutes.LOGIN) {
             LoginScreen(navigationAction = navigationAction, viewModel = hiltViewModel())
         }

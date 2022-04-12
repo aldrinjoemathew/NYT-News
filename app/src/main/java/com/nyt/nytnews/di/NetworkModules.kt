@@ -13,6 +13,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.components.SingletonComponent
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -61,12 +62,18 @@ class NetworkModule {
     @Provides
     fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor = HttpLoggingInterceptor()
 
+    @OptIn(ExperimentalSerializationApi::class)
     @Provides
-    fun provideConverterFactory(): Converter.Factory {
+    fun provideConverterFactory(json: Json): Converter.Factory {
         val contentType = "application/json".toMediaType()
-        return Json{
+        return json.asConverterFactory(contentType)
+    }
+
+    @Provides
+    fun provideJsonSerializer(): Json {
+        return Json {
             ignoreUnknownKeys = true
-        }.asConverterFactory(contentType)
+        }
     }
 }
 
