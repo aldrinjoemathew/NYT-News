@@ -46,19 +46,24 @@ fun HomeScreen(navigationAction: NytNavigationAction, viewModel: HomeViewModel) 
                         elevation = 0.dp
                     ) {
                         Row {
-                            AsyncImage(
-                                model = ImageRequest.Builder(LocalContext.current)
-                                    .data(item.imageUrl)
-                                    .crossfade(true)
-                                    .build(),
-                                placeholder = painterResource(R.drawable.ic_launcher_foreground),
-                                contentDescription = item.headline,
-                                contentScale = ContentScale.Crop,
-                                modifier = Modifier.size(150.dp)
-                            )
-                            Column (modifier = Modifier
-                                .height(150.dp)
-                                .padding(BaseSeparation)) {
+                            if (!item.imageUrl.isNullOrEmpty()) {
+                                AsyncImage(
+                                    model = ImageRequest.Builder(LocalContext.current)
+                                        .data(item.imageUrl)
+                                        .crossfade(true)
+                                        .build(),
+                                    placeholder = painterResource(R.drawable.ic_launcher_foreground),
+                                    error = painterResource(R.drawable.ic_launcher_foreground),
+                                    contentDescription = item.headline,
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier.size(150.dp)
+                                )
+                            }
+                            Column(
+                                modifier = Modifier
+                                    .heightIn(max = 150.dp, min = 0.dp)
+                                    .padding(horizontal = BaseSeparation, vertical = BaseSeparation),
+                            ) {
                                 Text(
                                     text = item.headline,
                                     fontSize = MaterialTheme.typography.subtitle1.fontSize,
@@ -72,7 +77,7 @@ fun HomeScreen(navigationAction: NytNavigationAction, viewModel: HomeViewModel) 
                                     fontSize = MaterialTheme.typography.body2.fontSize,
                                     fontWeight = FontWeight.Normal,
                                     overflow = TextOverflow.Ellipsis,
-                                    modifier = Modifier.weight(1f)
+                                    modifier = Modifier.weight(1f, fill = false)
                                 )
                                 Spacer(modifier = Modifier.height(BaseSeparation))
                             }
