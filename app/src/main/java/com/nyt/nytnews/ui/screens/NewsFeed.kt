@@ -9,6 +9,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -32,6 +33,8 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.nyt.nytnews.R
 import com.nyt.nytnews.models.NewsArticle
 import com.nyt.nytnews.ui.composables.ChipGroup
+import com.nyt.nytnews.ui.icons.Bookmark
+import com.nyt.nytnews.ui.icons.BookmarkBorder
 import com.nyt.nytnews.ui.navigation.NytNavigationAction
 import com.nyt.nytnews.ui.theme.BaseSeparation
 import com.nyt.nytnews.ui.theme.HalfBaseSeparation
@@ -105,12 +108,30 @@ private fun ArticleFeed(
         horizontalAlignment = Alignment.CenterHorizontally,
         contentPadding = PaddingValues(HalfBaseSeparation),
     ) {
-        item {
-            PopularNewsFeed(popularArticles)
+        if (popularArticles.isNotEmpty()) {
+            item {
+                PopularNewsFeed(popularArticles)
+            }
         }
         items(newsArticles.itemCount) { index ->
-            newsArticles[index]?.let { item ->
-                NewsCard(item)
+            newsArticles[index]?.let { article ->
+                //Randomize and show popular cards in between
+                if (index % 3 == 0 && article.headline.length % 2 == 0 && !article.imageUrl.isNullOrEmpty())
+                    PopularNewsCard(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentHeight(),
+                        article = article,
+                        navigateToArticle = { },
+                        onToggleBookmark = { },
+                        onShare = { }
+                    )
+                else NewsCard(
+                    article = article,
+                    navigateToArticle = { },
+                    onToggleBookmark = { },
+                    onShare = { }
+                )
             }
         }
         newsArticles.apply {
@@ -132,16 +153,25 @@ private fun ArticleFeed(
 
 @Composable
 private fun PopularNewsFeed(popularArticles: List<NewsArticle>) {
-    LazyRow(modifier = Modifier) {
-        itemsIndexed(popularArticles) { index, article ->
-            PopularNewsCard(
-                article = article,
-                navigateToArticle = { },
-                modifier = Modifier.padding(
-                    start = if (index == 0) 0.dp else HalfBaseSeparation,
-                    bottom = HalfBaseSeparation,
+    Column {
+        Spacer(modifier = Modifier.height(BaseSeparation))
+        Text(text = "Popular stories", style = MaterialTheme.typography.h5)
+        Spacer(modifier = Modifier.height(BaseSeparation))
+        LazyRow(modifier = Modifier) {
+            itemsIndexed(popularArticles) { index, article ->
+                PopularNewsCard(
+                    modifier = Modifier
+                        .padding(
+                            start = if (index == 0) 0.dp else HalfBaseSeparation,
+                            bottom = HalfBaseSeparation,
+                        )
+                        .width(280.dp),
+                    article = article,
+                    navigateToArticle = { },
+                    onToggleBookmark = { },
+                    onShare = { }
                 )
-            )
+            }
         }
     }
 }
@@ -232,12 +262,17 @@ fun BottomSheetContent(onFilterChanged: (String) -> Unit) {
 }
 
 @Composable
-private fun NewsCard(article: NewsArticle) {
+private fun NewsCard(
+    article: NewsArticle,
+    navigateToArticle: (String) -> Unit,
+    onToggleBookmark: () -> Unit,
+    onShare: () -> Unit
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .wrapContentHeight(),
-        elevation = 0.dp
+            .wrapContentHeight()
+            .clickable { },
     ) {
         Row {
             if (!article.imageUrl.isNullOrEmpty()) {
@@ -250,13 +285,18 @@ private fun NewsCard(article: NewsArticle) {
                     error = painterResource(R.drawable.ic_launcher_foreground),
                     contentDescription = article.headline,
                     contentScale = ContentScale.Crop,
-                    modifier = Modifier.size(150.dp)
+                    modifier = Modifier.size(150.dp, 180.dp)
                 )
             }
             Column(
                 modifier = Modifier
-                    .heightIn(max = 150.dp, min = 0.dp)
-                    .padding(horizontal = BaseSeparation, vertical = BaseSeparation),
+                    .heightIn(max = 180.dp, min = 0.dp)
+                    .padding(
+                        start = BaseSeparation,
+                        end = BaseSeparation,
+                        top = BaseSeparation,
+                        bottom = 0.dp
+                    ),
             ) {
                 Text(
                     text = article.headline,
@@ -273,7 +313,15 @@ private fun NewsCard(article: NewsArticle) {
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.weight(1f, fill = false)
                 )
-                Spacer(modifier = Modifier.height(BaseSeparation))
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight(),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    BookmarkButton(isBookmarked = false, onToggle = { onToggleBookmark() })
+                    ShareButton(onShare = { onShare() })
+                }
             }
         }
     }
@@ -314,13 +362,15 @@ fun ErrorRetry(
 
 @Composable
 fun PopularNewsCard(
+    modifier: Modifier = Modifier,
     article: NewsArticle,
     navigateToArticle: (String) -> Unit,
-    modifier: Modifier = Modifier
+    onToggleBookmark: () -> Unit,
+    onShare: () -> Unit
 ) {
     Card(
         shape = MaterialTheme.shapes.medium,
-        modifier = modifier.size(280.dp, 200.dp)
+        modifier = modifier,
     ) {
         Column(modifier = Modifier.clickable(onClick = { })) {
             AsyncImage(
@@ -333,11 +383,16 @@ fun PopularNewsCard(
                 contentDescription = article.headline,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .height(100.dp)
+                    .height(150.dp)
                     .fillMaxWidth()
             )
 
-            Column(modifier = Modifier.padding(16.dp)) {
+            Column(modifier = Modifier.padding(
+                start = BaseSeparation,
+                end = BaseSeparation,
+                top = BaseSeparation,
+                bottom = 0.dp
+            )) {
                 Text(
                     text = article.headline,
                     style = MaterialTheme.typography.h6,
@@ -350,7 +405,34 @@ fun PopularNewsCard(
                     overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.body2
                 )
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+                    BookmarkButton(isBookmarked = false, onToggle = { onToggleBookmark() })
+                    ShareButton(onShare = { onShare() })
+                }
             }
         }
+    }
+}
+
+@Composable
+private fun ShareButton(onShare: () -> Unit) {
+    IconButton(onClick = onShare) {
+        Icon(
+            imageVector = Icons.Filled.Share,
+            contentDescription = "Share article"
+        )
+    }
+}
+
+@Composable
+private fun BookmarkButton(isBookmarked: Boolean, onToggle: () -> Unit) {
+    IconToggleButton(
+        checked = isBookmarked,
+        onCheckedChange = { onToggle() },
+    ) {
+        Icon(
+            imageVector = if (isBookmarked) Icons.Filled.Bookmark else Icons.Filled.BookmarkBorder,
+            contentDescription = null // handled by click label of parent
+        )
     }
 }
