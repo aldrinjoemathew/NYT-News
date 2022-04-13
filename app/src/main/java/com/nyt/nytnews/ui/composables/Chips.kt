@@ -3,6 +3,7 @@ package com.nyt.nytnews.ui.composables
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.verticalScroll
@@ -12,6 +13,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import com.google.accompanist.flowlayout.FlowCrossAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.MainAxisAlignment
@@ -51,14 +53,13 @@ fun Chip(
 
 @Composable
 fun ChipGroup(
+    modifier: Modifier,
     chipItems: List<String> = emptyList(),
     selectedCar: String? = null,
     onSelectedChanged: (String) -> Unit = {},
 ) {
     FlowRow(
-        modifier = Modifier
-            .padding(BaseSeparation)
-            .fillMaxWidth()
+        modifier = modifier
             .verticalScroll(ScrollState(0)),
         mainAxisSpacing = HalfBaseSeparation,
         crossAxisSpacing = HalfBaseSeparation,

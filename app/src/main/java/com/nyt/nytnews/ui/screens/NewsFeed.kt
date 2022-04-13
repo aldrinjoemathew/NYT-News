@@ -4,7 +4,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -22,7 +21,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -221,9 +219,16 @@ val filters = listOf(
 
 @Composable
 fun BottomSheetContent(onFilterChanged: (String) -> Unit) {
-    ChipGroup(chipItems = filters, onSelectedChanged = {
-        onFilterChanged(it)
-    })
+    ChipGroup(
+        modifier = Modifier
+            .heightIn(min = 0.dp, max = 300.dp)
+            .fillMaxWidth()
+            .padding(BaseSeparation),
+        chipItems = filters,
+        onSelectedChanged = {
+            onFilterChanged(it)
+        },
+    )
 }
 
 @Composable
