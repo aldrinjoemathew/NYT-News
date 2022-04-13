@@ -92,9 +92,9 @@ fun NewsFeed(navigationAction: NytNavigationAction, viewModel: NewsFeedViewModel
                     }
                     newsArticles.apply {
                         when {
-                            loadState.refresh is LoadState.Loading -> {
+                            /*loadState.refresh is LoadState.Loading -> {
                                 item { LoadingItem(fullPage = true) }
-                            }
+                            }*/ //Already taken care by swipe to refresh
                             loadState.append is LoadState.Loading -> {
                                 item { LoadingItem(fullPage = false) }
                             }
