@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(private val newsRepository: NewsRepository) : ViewModel() {
+class NewsFeedViewModel @Inject constructor(private val newsRepository: NewsRepository) : ViewModel() {
 
     var filter = MutableStateFlow("")
 

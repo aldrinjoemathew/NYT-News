@@ -22,7 +22,7 @@ fun NytNavigationGraph(
             SignupScreen(navigationAction = navigationAction, viewModel = hiltViewModel())
         }
         composable(NavRoutes.HOME) {
-            HomeScreen(navigationAction = navigationAction, viewModel = hiltViewModel())
+            HomeScreen(navController = navController, navigationAction = navigationAction)
         }
     }
 }
