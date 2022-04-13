@@ -23,9 +23,10 @@ class NewsSource(
             return if (news.status != "OK") {
                 LoadResult.Error(Exception("Loading news failed"))
             } else {
-                Timber.d("${mapper.mapFromEntity(news).newsArticles}")
+                val newArticles = mapper.mapFromEntity(news).newsArticles
+                Timber.d("$newArticles")
                 LoadResult.Page(
-                    data = mapper.mapFromEntity(news).newsArticles,
+                    data = newArticles,
                     prevKey =
                     if (nextPage == 1) null
                     else nextPage - 1,

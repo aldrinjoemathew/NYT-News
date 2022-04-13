@@ -46,11 +46,6 @@ class NetworkModule {
         loggingInterceptor: HttpLoggingInterceptor,
     ): OkHttpClient {
         val builder = OkHttpClient.Builder()
-        if (BuildConfig::DEBUG.get()) {
-            loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
-        } else {
-            loggingInterceptor.level = HttpLoggingInterceptor.Level.NONE
-        }
         builder.retryOnConnectionFailure(true)
         builder.connectTimeout(3 * TIMEOUT_MILLIS, TIMEOUT_UNIT)
         builder.readTimeout(6 * TIMEOUT_MILLIS, TIMEOUT_UNIT)
@@ -60,7 +55,15 @@ class NetworkModule {
     }
 
     @Provides
-    fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor = HttpLoggingInterceptor()
+    fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor {
+        val loggingInterceptor = HttpLoggingInterceptor()
+        if (BuildConfig::DEBUG.get()) {
+            loggingInterceptor.level = HttpLoggingInterceptor.Level.BASIC
+        } else {
+            loggingInterceptor.level = HttpLoggingInterceptor.Level.NONE
+        }
+        return loggingInterceptor
+    }
 
     @OptIn(ExperimentalSerializationApi::class)
     @Provides
