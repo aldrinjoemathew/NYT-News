@@ -3,11 +3,16 @@ package com.nyt.nytnews.ui.screens
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,6 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
@@ -40,6 +46,7 @@ fun NewsFeed(navigationAction: NytNavigationAction, viewModel: NewsFeedViewModel
         rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val scope = rememberCoroutineScope()
     val newsArticles = viewModel.newsArticles.collectAsLazyPagingItems()
+    val popularArticles by viewModel.popularArticles.collectAsState()
 
     ModalBottomSheetLayout(
         sheetContent = {
@@ -78,45 +85,62 @@ fun NewsFeed(navigationAction: NytNavigationAction, viewModel: NewsFeedViewModel
                 onRefresh = {
                     newsArticles.refresh()
                 }) {
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(padding),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    contentPadding = PaddingValues(HalfBaseSeparation),
-                ) {
-                    items(newsArticles.itemCount) { index ->
-                        newsArticles[index]?.let { item ->
-                            NewsCard(item)
-                        }
-                    }
-                    newsArticles.apply {
-                        when {
-                            /*loadState.refresh is LoadState.Loading -> {
-                                item { LoadingItem(fullPage = true) }
-                            }*/ //Already taken care by swipe to refresh
-                            loadState.append is LoadState.Loading -> {
-                                item { LoadingItem(fullPage = false) }
-                            }
-                            loadState.refresh is LoadState.Error -> {
-                                //Move this outside of LazyColumn to show a full screen error view
-                                item {
-                                    ErrorRetry(onRetry = {
-                                        retry()
-                                    })
-                                }
-                            }
-                            loadState.append is LoadState.Error -> {
-                                item {
-                                    ErrorRetry(onRetry = {
-                                        retry()
-                                    })
-                                }
-                            }
-                        }
-                    }
+                ArticleFeed(padding, popularArticles, newsArticles)
+            }
+        }
+    }
+}
+
+@Composable
+private fun ArticleFeed(
+    padding: PaddingValues,
+    popularArticles: List<NewsArticle>,
+    newsArticles: LazyPagingItems<NewsArticle>
+) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(padding),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        contentPadding = PaddingValues(HalfBaseSeparation),
+    ) {
+        item {
+            PopularNewsFeed(popularArticles)
+        }
+        items(newsArticles.itemCount) { index ->
+            newsArticles[index]?.let { item ->
+                NewsCard(item)
+            }
+        }
+        newsArticles.apply {
+            when {
+                loadState.append is LoadState.Loading -> {
+                    item { LoadingItem(fullPage = false) }
+                }
+                loadState.refresh is LoadState.Error -> {
+                    //Move this outside of LazyColumn to show a full screen error view
+                    item { ErrorRetry(onRetry = { retry() }) }
+                }
+                loadState.append is LoadState.Error -> {
+                    item { ErrorRetry(onRetry = { retry() }) }
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun PopularNewsFeed(popularArticles: List<NewsArticle>) {
+    LazyRow(modifier = Modifier) {
+        itemsIndexed(popularArticles) { index, article ->
+            PopularNewsCard(
+                article = article,
+                navigateToArticle = { },
+                modifier = Modifier.padding(
+                    start = if (index == 0) 0.dp else HalfBaseSeparation,
+                    bottom = HalfBaseSeparation,
+                )
+            )
         }
     }
 }
@@ -200,24 +224,23 @@ fun BottomSheetContent(onFilterChanged: (String) -> Unit) {
 }
 
 @Composable
-private fun NewsCard(item: NewsArticle) {
+private fun NewsCard(article: NewsArticle) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight(),
-        backgroundColor = MaterialTheme.colors.primary.copy(alpha = 0.5f),
         elevation = 0.dp
     ) {
         Row {
-            if (!item.imageUrl.isNullOrEmpty()) {
+            if (!article.imageUrl.isNullOrEmpty()) {
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
-                        .data(item.imageUrl)
+                        .data(article.imageUrl)
                         .crossfade(true)
                         .build(),
                     placeholder = painterResource(R.drawable.ic_launcher_foreground),
                     error = painterResource(R.drawable.ic_launcher_foreground),
-                    contentDescription = item.headline,
+                    contentDescription = article.headline,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier.size(150.dp)
                 )
@@ -228,7 +251,7 @@ private fun NewsCard(item: NewsArticle) {
                     .padding(horizontal = BaseSeparation, vertical = BaseSeparation),
             ) {
                 Text(
-                    text = item.headline,
+                    text = article.headline,
                     fontSize = MaterialTheme.typography.subtitle1.fontSize,
                     fontWeight = FontWeight.Bold,
                     maxLines = 3,
@@ -236,7 +259,7 @@ private fun NewsCard(item: NewsArticle) {
                 )
                 Spacer(modifier = Modifier.height(BaseSeparation))
                 Text(
-                    text = item.leadContent,
+                    text = article.leadContent,
                     fontSize = MaterialTheme.typography.body2.fontSize,
                     fontWeight = FontWeight.Normal,
                     overflow = TextOverflow.Ellipsis,
@@ -278,5 +301,48 @@ fun ErrorRetry(
         Text(text = "Retry")
         Spacer(modifier = Modifier.size(BaseSeparation))
         Icon(imageVector = Icons.Filled.Refresh, contentDescription = "Refresh")
+    }
+}
+
+@Composable
+fun PopularNewsCard(
+    article: NewsArticle,
+    navigateToArticle: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        shape = MaterialTheme.shapes.medium,
+        modifier = modifier.size(280.dp, 200.dp)
+    ) {
+        Column(modifier = Modifier.clickable(onClick = { })) {
+            AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(article.imageUrl)
+                    .crossfade(true)
+                    .build(),
+                placeholder = painterResource(R.drawable.ic_launcher_foreground),
+                error = painterResource(R.drawable.ic_launcher_foreground),
+                contentDescription = article.headline,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .height(100.dp)
+                    .fillMaxWidth()
+            )
+
+            Column(modifier = Modifier.padding(16.dp)) {
+                Text(
+                    text = article.headline,
+                    style = MaterialTheme.typography.h6,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Text(
+                    text = article.abstractContent,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    style = MaterialTheme.typography.body2
+                )
+            }
+        }
     }
 }

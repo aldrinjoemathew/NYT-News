@@ -5,6 +5,7 @@ import com.nyt.nytnews.BuildConfig
 import com.nyt.nytnews.network.NytApiService
 import com.nyt.nytnews.network.mapper.NewsArticleMapper
 import com.nyt.nytnews.network.mapper.NewsResponseMapper
+import com.nyt.nytnews.network.mapper.PopularResponseMapper
 import com.nyt.nytnews.network.repository.NewsRepository
 import com.nyt.nytnews.network.repository.NewsRepositoryImpl
 import dagger.Binds
@@ -98,5 +99,10 @@ class NetworkMapperModule {
     @Provides
     fun provideNewsArticleMapper(): NewsArticleMapper {
         return NewsArticleMapper()
+    }
+
+    @Provides
+    fun providePopularArticleMapper(): PopularResponseMapper {
+        return PopularResponseMapper()
     }
 }

@@ -13,4 +13,6 @@ interface NewsRepository {
     ): NewsResponse
 
     fun newsFlow(filter: String? = null, query: String? = null): Flow<PagingData<NewsArticle>>
+
+    suspend fun popularArticles(): List<NewsArticle>
 }

@@ -7,13 +7,15 @@ import com.nyt.nytnews.models.NewsArticle
 import com.nyt.nytnews.models.NewsResponse
 import com.nyt.nytnews.network.NytApiService
 import com.nyt.nytnews.network.mapper.NewsResponseMapper
+import com.nyt.nytnews.network.mapper.PopularResponseMapper
 import com.nyt.nytnews.network.source.NewsSource
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class NewsRepositoryImpl @Inject constructor(
     private val apiService: NytApiService,
-    private val mapper: NewsResponseMapper
+    private val mapper: NewsResponseMapper,
+    private val popularResponseMapper: PopularResponseMapper
 ) : NewsRepository {
     override suspend fun loadNews(pageCount: Int?, filter: String?, query: String?): NewsResponse {
         val response = apiService.loadNews(pageKey = pageCount, filter = filter, query = query)
@@ -29,5 +31,10 @@ class NewsRepositoryImpl @Inject constructor(
             ),
             pagingSourceFactory = { NewsSource(mapper, apiService, filter, query) }
         ).flow
+    }
+
+    override suspend fun popularArticles(): List<NewsArticle> {
+        val response = apiService.loadPopularArticles()
+        return popularResponseMapper.mapFromEntities(response.results)
     }
 }
