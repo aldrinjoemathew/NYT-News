@@ -11,7 +11,8 @@ import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
-class NewsFeedViewModel @Inject constructor(private val newsRepository: NewsRepository) : ViewModel() {
+class NewsFeedViewModel @Inject constructor(private val newsRepository: NewsRepository) :
+    ViewModel() {
 
     var filter = MutableStateFlow("")
 
@@ -19,10 +20,6 @@ class NewsFeedViewModel @Inject constructor(private val newsRepository: NewsRepo
         newsRepository.newsFlow(filter = it).cachedIn(viewModelScope)
     }
     val newsArticles = _newsArticles
-
-    init {
-
-    }
 
     fun updateFilter(filter: String) {
         this.filter.update { filter }

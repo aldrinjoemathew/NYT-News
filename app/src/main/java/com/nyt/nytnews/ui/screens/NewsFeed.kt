@@ -8,6 +8,8 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,6 +24,8 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.nyt.nytnews.R
 import com.nyt.nytnews.models.NewsArticle
 import com.nyt.nytnews.ui.composables.ChipGroup
@@ -70,33 +74,39 @@ fun NewsFeed(navigationAction: NytNavigationAction, viewModel: NewsFeedViewModel
                     )
                 }
             },
-        ) {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                contentPadding = PaddingValues(HalfBaseSeparation),
-            ) {
-                items(newsArticles.itemCount) { index ->
-                    newsArticles[index]?.let { item ->
-                        NewsCard(item)
+        ) { padding ->
+            SwipeRefresh(state = rememberSwipeRefreshState(isRefreshing = newsArticles.loadState.refresh == LoadState.Loading), onRefresh = {
+                newsArticles.refresh()
+            }) {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(padding),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    contentPadding = PaddingValues(HalfBaseSeparation),
+                ) {
+                    items(newsArticles.itemCount) { index ->
+                        newsArticles[index]?.let { item ->
+                            NewsCard(item)
+                        }
                     }
-                }
-                newsArticles.apply {
-                    when {
-                        loadState.refresh is LoadState.Loading -> {
-                            item { LoadingItem(fullPage = true) }
-                        }
-                        loadState.append is LoadState.Loading -> {
-                            item { LoadingItem(fullPage = false) }
-                        }
-                        loadState.refresh is LoadState.Error -> {
+                    newsArticles.apply {
+                        when {
+                            loadState.refresh is LoadState.Loading -> {
+                                item { LoadingItem(fullPage = true) }
+                            }
+                            loadState.append is LoadState.Loading -> {
+                                item { LoadingItem(fullPage = false) }
+                            }
+                            loadState.refresh is LoadState.Error -> {
 
-                        }
-                        loadState.append is LoadState.Error -> {
-                            item {
-                                ErrorRetry(onRetry = {
-                                    retry()
-                                })
+                            }
+                            loadState.append is LoadState.Error -> {
+                                item {
+                                    ErrorRetry(onRetry = {
+                                        retry()
+                                    })
+                                }
                             }
                         }
                     }
