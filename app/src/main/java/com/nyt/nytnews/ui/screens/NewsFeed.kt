@@ -22,6 +22,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -47,6 +48,8 @@ fun NewsFeed(navigationAction: NytNavigationAction, viewModel: NewsFeedViewModel
     val scope = rememberCoroutineScope()
     val newsArticles = viewModel.newsArticles.collectAsLazyPagingItems()
     val popularArticles by viewModel.popularArticles.collectAsState()
+
+    viewModel.updateRefreshing(newsArticles.loadState.refresh is LoadState.Loading)
 
     ModalBottomSheetLayout(
         sheetContent = {

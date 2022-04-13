@@ -7,10 +7,7 @@ import com.nyt.nytnews.models.NewsArticle
 import com.nyt.nytnews.network.repository.NewsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -19,6 +16,8 @@ class NewsFeedViewModel @Inject constructor(private val newsRepository: NewsRepo
     ViewModel() {
 
     var filter = MutableStateFlow("")
+
+    private val _isRefreshing = MutableStateFlow(false)
 
     private val _newsArticles = filter.flatMapLatest {
         newsRepository.newsFlow(filter = it).cachedIn(viewModelScope)
@@ -34,7 +33,15 @@ class NewsFeedViewModel @Inject constructor(private val newsRepository: NewsRepo
     }
 
     init {
-        loadPopularArticles()
+        viewModelScope.launch(Dispatchers.IO) {
+            _isRefreshing.collectLatest { refreshing ->
+                if (refreshing) loadPopularArticles()
+            }
+        }
+    }
+
+    fun updateRefreshing(isRefreshing: Boolean) {
+        _isRefreshing.update { isRefreshing }
     }
 
     fun loadPopularArticles() {
