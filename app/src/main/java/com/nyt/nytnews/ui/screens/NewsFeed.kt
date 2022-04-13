@@ -8,8 +8,6 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -75,9 +73,11 @@ fun NewsFeed(navigationAction: NytNavigationAction, viewModel: NewsFeedViewModel
                 }
             },
         ) { padding ->
-            SwipeRefresh(state = rememberSwipeRefreshState(isRefreshing = newsArticles.loadState.refresh == LoadState.Loading), onRefresh = {
-                newsArticles.refresh()
-            }) {
+            SwipeRefresh(
+                state = rememberSwipeRefreshState(isRefreshing = newsArticles.loadState.refresh == LoadState.Loading),
+                onRefresh = {
+                    newsArticles.refresh()
+                }) {
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
@@ -99,7 +99,12 @@ fun NewsFeed(navigationAction: NytNavigationAction, viewModel: NewsFeedViewModel
                                 item { LoadingItem(fullPage = false) }
                             }
                             loadState.refresh is LoadState.Error -> {
-
+                                //Move this outside of LazyColumn to show a full screen error view
+                                item {
+                                    ErrorRetry(onRetry = {
+                                        retry()
+                                    })
+                                }
                             }
                             loadState.append is LoadState.Error -> {
                                 item {
