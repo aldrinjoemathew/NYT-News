@@ -5,7 +5,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.nyt.nytnews.ui.screens.HomeScreen
+import com.nyt.nytnews.ui.screens.home.HomeScreen
 import com.nyt.nytnews.ui.screens.login.LoginScreen
 import com.nyt.nytnews.ui.screens.signup.SignupScreen
 
