@@ -1,4 +1,4 @@
-package com.nyt.nytnews.ui.viewmodel
+package com.nyt.nytnews.ui.screens.newsfeed
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -44,7 +44,7 @@ class NewsFeedViewModel @Inject constructor(private val newsRepository: NewsRepo
         _isRefreshing.update { isRefreshing }
     }
 
-    fun loadPopularArticles() {
+    private fun loadPopularArticles() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val popularArticles = newsRepository.popularArticles()

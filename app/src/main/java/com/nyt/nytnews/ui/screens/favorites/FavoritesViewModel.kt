@@ -1,9 +1,9 @@
-package com.nyt.nytnews.ui.viewmodel
+package com.nyt.nytnews.ui.screens.favorites
 
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class ProfileViewModel @Inject constructor(): ViewModel() {
+class FavoritesViewModel @Inject constructor(): ViewModel() {
 }

@@ -1,4 +1,4 @@
-package com.nyt.nytnews.ui.screens
+package com.nyt.nytnews.ui.screens.signup
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
@@ -17,7 +17,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.nyt.nytnews.ui.composables.ProgressButton
 import com.nyt.nytnews.ui.navigation.NytNavigationAction
-import com.nyt.nytnews.ui.viewmodel.SignupViewModel
+import com.nyt.nytnews.ui.screens.login.BrandImage
 import com.nyt.nytnews.utils.ResponseIo
 import kotlinx.coroutines.launch
 
@@ -54,18 +54,20 @@ fun SignupScreen(navigationAction: NytNavigationAction, viewModel: SignupViewMod
                 onSignup = { viewModel.signup(name, email, password) }
             )
             if (signupResponse is ResponseIo.Error) {
-                LaunchedEffect(key1 = scaffoldState.snackbarHostState, block = {
-                    //Dismissing old snackbar instance
-                    scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
-                    coroutineScope.launch {
-                        scaffoldState.snackbarHostState
-                            .showSnackbar(
-                                "Signup failed",
-                                actionLabel = "Dismiss",
-                                duration = SnackbarDuration.Long
-                            )
-                    }
-                })
+                (signupResponse as? ResponseIo.Error)?.message?.let { error ->
+                    LaunchedEffect(key1 = scaffoldState.snackbarHostState, block = {
+                        //Dismissing old snackbar instance
+                        scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
+                        coroutineScope.launch {
+                            scaffoldState.snackbarHostState
+                                .showSnackbar(
+                                    message = error,
+                                    actionLabel = "Dismiss",
+                                    duration = SnackbarDuration.Long
+                                )
+                        }
+                    })
+                }
             }
         }
     }

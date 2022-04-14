@@ -1,4 +1,4 @@
-package com.nyt.nytnews.ui.screens
+package com.nyt.nytnews.ui.screens.login
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -10,21 +10,22 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
 import com.nyt.nytnews.R
 import com.nyt.nytnews.ui.composables.ProgressButton
 import com.nyt.nytnews.ui.navigation.NytNavigationAction
 import com.nyt.nytnews.ui.theme.TextSizeNormalPlus
-import com.nyt.nytnews.ui.viewmodel.LoginViewModel
 import com.nyt.nytnews.utils.ResponseIo
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @Composable
 fun LoginScreen(navigationAction: NytNavigationAction, viewModel: LoginViewModel) {
@@ -40,7 +41,7 @@ fun LoginScreen(navigationAction: NytNavigationAction, viewModel: LoginViewModel
 
     Scaffold(
         scaffoldState = scaffoldState
-    ) {
+    ) { padding ->
         when (loginResponse) {
             is ResponseIo.Data -> {
                 LaunchedEffect(key1 = loginResponse, block = {
@@ -62,18 +63,20 @@ fun LoginScreen(navigationAction: NytNavigationAction, viewModel: LoginViewModel
                     onSignup = navigationAction.navigateToSignup
                 )
                 if (loginResponse is ResponseIo.Error) {
-                    LaunchedEffect(key1 = scaffoldState.snackbarHostState, block = {
-                        //Dismissing old snackbar instance
-                        scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
-                        coroutineScope.launch {
-                            scaffoldState.snackbarHostState
-                                .showSnackbar(
-                                    "Login failed",
-                                    actionLabel = "Dismiss",
-                                    duration = SnackbarDuration.Long
-                                )
-                        }
-                    })
+                    (loginResponse as? ResponseIo.Error)?.message?.let { error ->
+                        LaunchedEffect(key1 = scaffoldState.snackbarHostState, block = {
+                            //Dismissing old snackbar instance
+                            scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
+                            coroutineScope.launch {
+                                scaffoldState.snackbarHostState
+                                    .showSnackbar(
+                                        message = error,
+                                        actionLabel = "Dismiss",
+                                        duration = SnackbarDuration.Long
+                                    )
+                            }
+                        })
+                    }
                 }
             }
         }
@@ -103,7 +106,7 @@ private fun LoginView(
         Spacer(modifier = Modifier.size(10.dp))
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
-            label = { Text(text = "Email") },
+            label = { Text(text = stringResource(R.string.tf_email)) },
             value = email,
             onValueChange = onEmailChanged,
             keyboardOptions = KeyboardOptions(
@@ -114,7 +117,7 @@ private fun LoginView(
         Spacer(modifier = Modifier.size(10.dp))
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
-            label = { Text(text = "Password") },
+            label = { Text(text = stringResource(R.string.tf_password)) },
             value = password,
             onValueChange = onPasswordChanged,
             keyboardOptions = KeyboardOptions(
@@ -130,7 +133,7 @@ private fun LoginView(
         ProgressButton(
             modifier = Modifier.fillMaxWidth(),
             enabled = isValidEmail && isValidPassword,
-            text = "Login",
+            text = stringResource(R.string.btn_action_login),
             onClick = { isLoading ->
                 focusManager.clearFocus(true)
                 if (!isLoading && isValidEmail && isValidPassword) onLogin()
@@ -139,7 +142,7 @@ private fun LoginView(
         )
         Spacer(modifier = Modifier.size(20.dp))
         Text(
-            text = "Click here to signup!",
+            text = stringResource(R.string.action_signup),
             modifier = Modifier.clickable(enabled = !isLoading, onClick = onSignup),
             style = TextStyle(
                 textDecoration = TextDecoration.Underline,
@@ -152,13 +155,14 @@ private fun LoginView(
 @Composable
 fun BrandImage() {
     Image(
-        painter = rememberImagePainter(
-            data = R.drawable.ic_launcher_foreground,
-            builder = {
-                placeholder(R.drawable.ic_launcher_foreground)
-            }
+        painter = rememberAsyncImagePainter(
+            ImageRequest.Builder(LocalContext.current)
+                .data(data = R.drawable.ic_launcher_foreground)
+                .apply(block = fun ImageRequest.Builder.() {
+                    placeholder(R.drawable.ic_launcher_foreground)
+                }).build()
         ),
-        contentDescription = "Brand Image",
+        contentDescription = stringResource(R.string.cd_brand_image),
         alignment = Alignment.Center,
         modifier = Modifier
             .height(250.dp)

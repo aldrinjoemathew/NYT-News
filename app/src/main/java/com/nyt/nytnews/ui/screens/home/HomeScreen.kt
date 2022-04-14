@@ -1,4 +1,4 @@
-package com.nyt.nytnews.ui.screens
+package com.nyt.nytnews.ui.screens.home
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,10 +12,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.nyt.nytnews.R
 import com.nyt.nytnews.ui.navigation.BottomNavigationGraph
 import com.nyt.nytnews.ui.navigation.NavRoutes
 import com.nyt.nytnews.ui.navigation.NytNavigationAction
@@ -29,7 +31,7 @@ fun HomeScreen(
     val bottomNavController = rememberNavController()
     Scaffold(modifier = Modifier.fillMaxSize(), topBar = {
         TopAppBar(title = {
-            Text(text = "NYT News")
+            Text(text = stringResource(R.string.app_name))
         })
     }, bottomBar = {
         BottomNavigationBar(navController = bottomNavController)

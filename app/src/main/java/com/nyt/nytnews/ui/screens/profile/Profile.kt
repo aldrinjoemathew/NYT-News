@@ -1,8 +1,8 @@
-package com.nyt.nytnews.ui.screens
+package com.nyt.nytnews.ui.screens.profile
 
 import androidx.compose.runtime.Composable
 import com.nyt.nytnews.ui.navigation.NytNavigationAction
-import com.nyt.nytnews.ui.viewmodel.ProfileViewModel
+import com.nyt.nytnews.ui.screens.profile.ProfileViewModel
 
 
 @Composable

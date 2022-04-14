@@ -6,8 +6,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.nyt.nytnews.ui.screens.HomeScreen
-import com.nyt.nytnews.ui.screens.LoginScreen
-import com.nyt.nytnews.ui.screens.SignupScreen
+import com.nyt.nytnews.ui.screens.login.LoginScreen
+import com.nyt.nytnews.ui.screens.signup.SignupScreen
 
 @Composable
 fun NytNavigationGraph(

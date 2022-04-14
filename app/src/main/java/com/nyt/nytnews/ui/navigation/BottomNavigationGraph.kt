@@ -5,9 +5,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.nyt.nytnews.ui.screens.Favorites
-import com.nyt.nytnews.ui.screens.NewsFeed
-import com.nyt.nytnews.ui.screens.Profile
+import com.nyt.nytnews.ui.screens.favorites.Favorites
+import com.nyt.nytnews.ui.screens.newsfeed.NewsFeed
+import com.nyt.nytnews.ui.screens.profile.Profile
 
 @Composable
 fun BottomNavigationGraph(
