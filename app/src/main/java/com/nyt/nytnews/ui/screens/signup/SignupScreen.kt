@@ -3,10 +3,7 @@ package com.nyt.nytnews.ui.screens.signup
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.SnackbarDuration
-import androidx.compose.material.Text
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,40 +30,44 @@ fun SignupScreen(navigationAction: NytNavigationAction, viewModel: SignupViewMod
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
-    when (signupResponse) {
-        is ResponseIo.Data -> {
-            scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
-            navigationAction.navigateToHome()
-        }
-        is ResponseIo.Error, is ResponseIo.Loading, ResponseIo.Empty -> {
-            SignupView(
-                name = name,
-                email = email,
-                password = password,
-                focusManager = focusManager,
-                isLoading = signupResponse is ResponseIo.Loading,
-                onNameChanged = { name = it },
-                onEmailChanged = { email = it },
-                onPasswordChanged = { password = it },
-                isValidName = viewModel.isValidName(name),
-                isValidEmail = viewModel.isValidEmail(email),
-                isValidPassword = viewModel.isValidPassword(password),
-                onSignup = { viewModel.signup(name, email, password) }
-            )
-            if (signupResponse is ResponseIo.Error) {
-                (signupResponse as? ResponseIo.Error)?.message?.let { error ->
-                    LaunchedEffect(key1 = scaffoldState.snackbarHostState, block = {
-                        //Dismissing old snackbar instance
-                        scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
-                        coroutineScope.launch {
-                            scaffoldState.snackbarHostState
-                                .showSnackbar(
-                                    message = error,
-                                    actionLabel = "Dismiss",
-                                    duration = SnackbarDuration.Long
-                                )
-                        }
-                    })
+    Scaffold(
+        scaffoldState = scaffoldState
+    ) { padding ->
+        when (signupResponse) {
+            is ResponseIo.Data -> {
+                scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
+                navigationAction.navigateToHome()
+            }
+            is ResponseIo.Error, is ResponseIo.Loading, ResponseIo.Empty -> {
+                SignupView(
+                    name = name,
+                    email = email,
+                    password = password,
+                    focusManager = focusManager,
+                    isLoading = signupResponse is ResponseIo.Loading,
+                    onNameChanged = { name = it },
+                    onEmailChanged = { email = it },
+                    onPasswordChanged = { password = it },
+                    isValidName = viewModel.isValidName(name),
+                    isValidEmail = viewModel.isValidEmail(email),
+                    isValidPassword = viewModel.isValidPassword(password),
+                    onSignup = { viewModel.signup(name, email, password) }
+                )
+                if (signupResponse is ResponseIo.Error) {
+                    (signupResponse as? ResponseIo.Error)?.message?.let { error ->
+                        LaunchedEffect(key1 = scaffoldState.snackbarHostState, block = {
+                            //Dismissing old snackbar instance
+                            scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
+                            coroutineScope.launch {
+                                scaffoldState.snackbarHostState
+                                    .showSnackbar(
+                                        message = error,
+                                        actionLabel = "Dismiss",
+                                        duration = SnackbarDuration.Long
+                                    )
+                            }
+                        })
+                    }
                 }
             }
         }
