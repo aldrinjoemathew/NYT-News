@@ -9,9 +9,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.nyt.nytnews.R
 import com.nyt.nytnews.ui.composables.ProgressButton
 import com.nyt.nytnews.ui.navigation.NytNavigationAction
 import com.nyt.nytnews.ui.screens.login.BrandImage
@@ -99,7 +101,7 @@ private fun SignupView(
         Spacer(modifier = Modifier.size(10.dp))
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
-            label = { Text(text = "Name") },
+            label = { Text(text = stringResource(R.string.tf_name)) },
             value = name,
             onValueChange = onNameChanged,
             keyboardOptions = KeyboardOptions(
@@ -110,7 +112,7 @@ private fun SignupView(
         Spacer(modifier = Modifier.size(10.dp))
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
-            label = { Text(text = "Email") },
+            label = { Text(text = stringResource(id = R.string.tf_email)) },
             value = email,
             onValueChange = onEmailChanged,
             keyboardOptions = KeyboardOptions(
@@ -121,7 +123,7 @@ private fun SignupView(
         Spacer(modifier = Modifier.size(10.dp))
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
-            label = { Text(text = "Password") },
+            label = { Text(text = stringResource(id = R.string.tf_password)) },
             value = password,
             onValueChange = onPasswordChanged,
             keyboardOptions = KeyboardOptions(
@@ -137,7 +139,7 @@ private fun SignupView(
         ProgressButton(
             modifier = Modifier.fillMaxWidth(),
             enabled = isValidEmail && isValidPassword,
-            text = "Signup",
+            text = stringResource(R.string.btn_signup),
             onClick = { isLoading ->
                 focusManager.clearFocus(true)
                 if (!isLoading && isValidName && isValidEmail && isValidPassword) onSignup()

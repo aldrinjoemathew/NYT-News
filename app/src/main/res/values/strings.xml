@@ -10,6 +10,8 @@
     <string name="tf_password">Password</string>
     <string name="tf_email">Email</string>
     <string name="cd_brand_image">Brand Image</string>
+    <string name="tf_name">Name</string>
+    <string name="btn_signup">Signup</string>
 
     <string-array name="news_filters">
         <item>Arts</item>
