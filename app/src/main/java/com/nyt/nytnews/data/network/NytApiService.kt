@@ -1,8 +1,8 @@
-package com.nyt.nytnews.network
+package com.nyt.nytnews.data.network
 
 import com.nyt.nytnews.BuildConfig
-import com.nyt.nytnews.network.models.NewsResponseEntity
-import com.nyt.nytnews.network.models.PopularNewsResponseEntity
+import com.nyt.nytnews.data.network.models.NewsResponseEntity
+import com.nyt.nytnews.data.network.models.PopularNewsResponseEntity
 import retrofit2.http.GET
 import retrofit2.http.Query
 

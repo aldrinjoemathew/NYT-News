@@ -1,14 +1,14 @@
-package com.nyt.nytnews.network.repository
+package com.nyt.nytnews.data.repository
 
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.nyt.nytnews.models.NewsArticle
 import com.nyt.nytnews.models.NewsResponse
-import com.nyt.nytnews.network.NytApiService
-import com.nyt.nytnews.network.mapper.NewsResponseMapper
-import com.nyt.nytnews.network.mapper.PopularResponseMapper
-import com.nyt.nytnews.network.source.NewsSource
+import com.nyt.nytnews.data.network.NytApiService
+import com.nyt.nytnews.data.network.mapper.NewsResponseMapper
+import com.nyt.nytnews.data.network.mapper.PopularResponseMapper
+import com.nyt.nytnews.data.NewsSource
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

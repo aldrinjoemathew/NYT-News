@@ -1,11 +1,11 @@
-package com.nyt.nytnews.db.dao
+package com.nyt.nytnews.data.db.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.nyt.nytnews.db.entities.UserEntity
-import com.nyt.nytnews.db.models.User
+import com.nyt.nytnews.data.db.entities.UserEntity
+import com.nyt.nytnews.data.db.models.User
 
 @Dao
 interface UserDao {

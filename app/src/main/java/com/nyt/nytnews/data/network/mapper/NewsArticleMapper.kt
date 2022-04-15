@@ -1,9 +1,9 @@
-package com.nyt.nytnews.network.mapper
+package com.nyt.nytnews.data.network.mapper
 
 import com.nyt.nytnews.models.NewsArticle
-import com.nyt.nytnews.network.models.HeadlineEntity
-import com.nyt.nytnews.network.models.MultiMediaEntity
-import com.nyt.nytnews.network.models.NewsArticleEntity
+import com.nyt.nytnews.data.network.models.HeadlineEntity
+import com.nyt.nytnews.data.network.models.MultiMediaEntity
+import com.nyt.nytnews.data.network.models.NewsArticleEntity
 import com.nyt.nytnews.utils.EntityMapper
 
 class NewsArticleMapper : EntityMapper<NewsArticleEntity, NewsArticle> {

@@ -1,4 +1,4 @@
-package com.nyt.nytnews.db.entities
+package com.nyt.nytnews.data.db.entities
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

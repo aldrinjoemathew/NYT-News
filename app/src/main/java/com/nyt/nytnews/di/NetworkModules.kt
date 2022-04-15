@@ -2,17 +2,10 @@ package com.nyt.nytnews.di
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.nyt.nytnews.BuildConfig
-import com.nyt.nytnews.network.NytApiService
-import com.nyt.nytnews.network.mapper.NewsArticleMapper
-import com.nyt.nytnews.network.mapper.NewsResponseMapper
-import com.nyt.nytnews.network.mapper.PopularResponseMapper
-import com.nyt.nytnews.network.repository.NewsRepository
-import com.nyt.nytnews.network.repository.NewsRepositoryImpl
-import dagger.Binds
+import com.nyt.nytnews.data.network.NytApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
@@ -78,31 +71,5 @@ class NetworkModule {
         return Json {
             ignoreUnknownKeys = true
         }
-    }
-}
-
-@Module
-@InstallIn(ViewModelComponent::class)
-abstract class NetworkRepositoryModule {
-    @Binds
-    abstract fun providesNewsRepository(newsRepositoryImpl: NewsRepositoryImpl): NewsRepository
-}
-
-@Module
-@InstallIn(ViewModelComponent::class)
-class NetworkMapperModule {
-    @Provides
-    fun provideNewsResponseMapper(newsArticleMapper: NewsArticleMapper): NewsResponseMapper {
-        return NewsResponseMapper(newsArticleMapper)
-    }
-
-    @Provides
-    fun provideNewsArticleMapper(): NewsArticleMapper {
-        return NewsArticleMapper()
-    }
-
-    @Provides
-    fun providePopularArticleMapper(): PopularResponseMapper {
-        return PopularResponseMapper()
     }
 }

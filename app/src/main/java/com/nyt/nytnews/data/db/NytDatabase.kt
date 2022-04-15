@@ -1,11 +1,11 @@
-package com.nyt.nytnews.db
+package com.nyt.nytnews.data.db
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.nyt.nytnews.db.dao.UserDao
-import com.nyt.nytnews.db.entities.UserEntity
+import com.nyt.nytnews.data.db.dao.UserDao
+import com.nyt.nytnews.data.db.entities.UserEntity
 
 @Database(
     entities = [

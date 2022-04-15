@@ -1,10 +1,10 @@
-package com.nyt.nytnews.network.source
+package com.nyt.nytnews.data
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.nyt.nytnews.models.NewsArticle
-import com.nyt.nytnews.network.NytApiService
-import com.nyt.nytnews.network.mapper.NewsResponseMapper
+import com.nyt.nytnews.data.network.NytApiService
+import com.nyt.nytnews.data.network.mapper.NewsResponseMapper
 import timber.log.Timber
 
 class NewsSource(

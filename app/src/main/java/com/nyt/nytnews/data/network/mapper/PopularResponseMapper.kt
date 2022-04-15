@@ -1,8 +1,7 @@
-package com.nyt.nytnews.network.mapper
+package com.nyt.nytnews.data.network.mapper
 
 import com.nyt.nytnews.models.NewsArticle
-import com.nyt.nytnews.network.models.NewsArticleEntity
-import com.nyt.nytnews.network.models.PopularArticle
+import com.nyt.nytnews.data.network.models.PopularArticle
 import com.nyt.nytnews.utils.EntityMapper
 
 class PopularResponseMapper : EntityMapper<PopularArticle, NewsArticle> {

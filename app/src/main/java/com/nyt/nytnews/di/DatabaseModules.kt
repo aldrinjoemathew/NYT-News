@@ -1,15 +1,11 @@
 package com.nyt.nytnews.di
 
 import android.content.Context
-import com.nyt.nytnews.db.NytDatabase
-import com.nyt.nytnews.db.dao.UserDao
-import com.nyt.nytnews.db.repository.UserRepo
-import com.nyt.nytnews.db.repository.UserRepoImpl
-import dagger.Binds
+import com.nyt.nytnews.data.db.NytDatabase
+import com.nyt.nytnews.data.db.dao.UserDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
@@ -27,11 +23,4 @@ class DatabaseModule {
     fun provideAppDatabase(@ApplicationContext appContext: Context): NytDatabase {
         return NytDatabase.buildDatabase(appContext)
     }
-}
-
-@Module
-@InstallIn(ViewModelComponent::class)
-abstract class RepositoryModule {
-    @Binds
-    abstract fun providesUserRepository(userRepoImpl: UserRepoImpl): UserRepo
 }

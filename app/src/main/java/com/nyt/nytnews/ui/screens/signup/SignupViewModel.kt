@@ -3,8 +3,8 @@ package com.nyt.nytnews.ui.screens.signup
 import android.util.Patterns
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.nyt.nytnews.db.models.User
-import com.nyt.nytnews.db.repository.UserRepo
+import com.nyt.nytnews.data.db.models.User
+import com.nyt.nytnews.data.repository.UserRepo
 import com.nyt.nytnews.session.SessionManager
 import com.nyt.nytnews.utils.ResponseIo
 import dagger.hilt.android.lifecycle.HiltViewModel

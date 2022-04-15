@@ -1,8 +1,8 @@
-package com.nyt.nytnews.db.repository
+package com.nyt.nytnews.data.repository
 
-import com.nyt.nytnews.db.dao.UserDao
-import com.nyt.nytnews.db.entities.UserEntity
-import com.nyt.nytnews.db.models.User
+import com.nyt.nytnews.data.db.dao.UserDao
+import com.nyt.nytnews.data.db.entities.UserEntity
+import com.nyt.nytnews.data.db.models.User
 import javax.inject.Inject
 
 class UserRepoImpl @Inject constructor(private val userDao: UserDao) : UserRepo {

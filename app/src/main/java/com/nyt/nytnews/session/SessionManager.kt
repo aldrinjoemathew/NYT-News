@@ -1,7 +1,7 @@
 package com.nyt.nytnews.session
 
 import android.content.SharedPreferences
-import com.nyt.nytnews.db.models.User
+import com.nyt.nytnews.data.db.models.User
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json

@@ -1,4 +1,4 @@
-package com.nyt.nytnews.network.models
+package com.nyt.nytnews.data.network.models
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

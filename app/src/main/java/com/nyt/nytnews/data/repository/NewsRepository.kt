@@ -1,4 +1,4 @@
-package com.nyt.nytnews.network.repository
+package com.nyt.nytnews.data.repository
 
 import androidx.paging.PagingData
 import com.nyt.nytnews.models.NewsArticle
