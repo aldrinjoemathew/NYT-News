@@ -37,8 +37,10 @@ fun SignupScreen(navigationAction: NytNavigationAction, viewModel: SignupViewMod
     ) { padding ->
         when (signupResponse) {
             is ResponseIo.Data -> {
-                scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
-                navigationAction.navigateToHome()
+                LaunchedEffect(key1 = signupResponse, block = {
+                    scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
+                    navigationAction.navigateToHome()
+                })
             }
             is ResponseIo.Error, is ResponseIo.Loading, ResponseIo.Empty -> {
                 SignupView(
