@@ -4,14 +4,20 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.nyt.nytnews.data.db.dao.NewsArticleDao
+import com.nyt.nytnews.data.db.dao.RemoteKeysDao
 import com.nyt.nytnews.data.db.dao.UserDao
+import com.nyt.nytnews.data.db.entities.NewsArticleDbEntity
+import com.nyt.nytnews.data.db.entities.RemoteKeys
 import com.nyt.nytnews.data.db.entities.UserEntity
 
 @Database(
     entities = [
-        UserEntity::class
+        UserEntity::class,
+        NewsArticleDbEntity::class,
+        RemoteKeys::class
     ],
-    version = 2,
+    version = 6,
     exportSchema = false
 )
 abstract class NytDatabase : RoomDatabase() {
@@ -27,5 +33,7 @@ abstract class NytDatabase : RoomDatabase() {
     }
 
     abstract fun userDao(): UserDao
+    abstract fun newsArticleDao(): NewsArticleDao
+    abstract fun remoteKeysDao(): RemoteKeysDao
 
 }

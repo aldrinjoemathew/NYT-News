@@ -12,7 +12,7 @@ data class NewsResponseEntity(
 @Serializable
 data class NewsResponseEnclosureEntity(
     val meta: MetaData,
-    @SerialName("docs") val articles: List<NewsArticleEntity>
+    @SerialName("docs") val articles: List<NewsArticleNwEntity>
 )
 
 @Serializable

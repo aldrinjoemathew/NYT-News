@@ -1,9 +1,9 @@
-package com.nyt.nytnews.data.network.mapper
+package com.nyt.nytnews.data.mapper
 
-import com.nyt.nytnews.models.NewsResponse
 import com.nyt.nytnews.data.network.models.MetaData
 import com.nyt.nytnews.data.network.models.NewsResponseEnclosureEntity
 import com.nyt.nytnews.data.network.models.NewsResponseEntity
+import com.nyt.nytnews.models.NewsResponse
 import com.nyt.nytnews.utils.EntityMapper
 import javax.inject.Inject
 

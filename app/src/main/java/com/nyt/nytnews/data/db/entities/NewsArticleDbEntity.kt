@@ -1,8 +1,12 @@
-package com.nyt.nytnews.models
+package com.nyt.nytnews.data.db.entities
 
 import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
-data class NewsArticle(
+@Entity(tableName = "news_articles")
+data class NewsArticleDbEntity(
+    @PrimaryKey
     @ColumnInfo(name = "id")
     val id: String,
     @ColumnInfo(name = "abstract")
