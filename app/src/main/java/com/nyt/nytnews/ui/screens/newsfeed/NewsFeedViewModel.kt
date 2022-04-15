@@ -20,8 +20,8 @@ class NewsFeedViewModel @Inject constructor(private val newsRepository: NewsRepo
     private val _isRefreshing = MutableStateFlow(false)
 
     private val _newsArticles = filter.flatMapLatest {
-        newsRepository.newsFlow(filter = it).cachedIn(viewModelScope)
-    }
+        newsRepository.newsFlow(filter = it)
+    }.cachedIn(viewModelScope)
     val newsArticles = _newsArticles
 
     private val _popularArticles: MutableStateFlow<List<NewsArticle>> =

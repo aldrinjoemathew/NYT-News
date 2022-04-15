@@ -38,6 +38,8 @@ fun NewsFeed(navigationAction: NytNavigationAction, viewModel: NewsFeedViewModel
     val newsArticles = viewModel.newsArticles.collectAsLazyPagingItems()
     val popularArticles by viewModel.popularArticles.collectAsState()
 
+    if (newsArticles.itemCount == 0 && newsArticles.loadState.refresh is LoadState.NotLoading ) return
+
     viewModel.updateRefreshing(newsArticles.loadState.refresh is LoadState.Loading)
 
     ModalBottomSheetLayout(
