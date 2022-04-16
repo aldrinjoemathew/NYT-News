@@ -2,18 +2,15 @@ package com.nyt.nytnews.ui.composables
 
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
 import com.google.accompanist.flowlayout.FlowCrossAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.MainAxisAlignment
@@ -27,11 +24,12 @@ fun Chip(
     isSelected: Boolean = false,
     onSelectionChanged: (String) -> Unit = {},
 ) {
+    val chipColor = if (isSelected) MaterialTheme.colors.secondary else MaterialTheme.colors.surface
     Surface(
         modifier = Modifier.padding(HalfBaseSeparation),
         elevation = BaseSeparation,
         shape = MaterialTheme.shapes.medium,
-        color = if (isSelected) Color.LightGray else MaterialTheme.colors.primary
+        color = chipColor
     ) {
         Row(modifier = Modifier
             .toggleable(
@@ -44,7 +42,7 @@ fun Chip(
             Text(
                 text = name,
                 style = MaterialTheme.typography.body2,
-                color = Color.White,
+                color = MaterialTheme.colors.contentColorFor(chipColor),
                 modifier = Modifier.padding(BaseSeparation)
             )
         }
@@ -55,7 +53,7 @@ fun Chip(
 fun ChipGroup(
     modifier: Modifier,
     chipItems: List<String> = emptyList(),
-    selectedCar: String? = null,
+    selectedItem: String? = null,
     onSelectedChanged: (String) -> Unit = {},
 ) {
     FlowRow(
@@ -70,7 +68,7 @@ fun ChipGroup(
         chipItems.forEach { item ->
             Chip(
                 name = item,
-                isSelected = selectedCar == item,
+                isSelected = selectedItem == item,
                 onSelectionChanged = {
                     onSelectedChanged(it)
                 },

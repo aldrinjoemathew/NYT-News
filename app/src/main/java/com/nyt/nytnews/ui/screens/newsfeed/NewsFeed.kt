@@ -37,6 +37,7 @@ fun NewsFeed(navigationAction: NytNavigationAction, viewModel: NewsFeedViewModel
     val scope = rememberCoroutineScope()
     val newsArticles = viewModel.newsArticles.collectAsLazyPagingItems()
     val popularArticles by viewModel.popularArticles.collectAsState()
+    val filter by viewModel.filter.collectAsState()
 
     if (newsArticles.itemCount == 0 && newsArticles.loadState.refresh is LoadState.NotLoading ) return
 
@@ -44,7 +45,7 @@ fun NewsFeed(navigationAction: NytNavigationAction, viewModel: NewsFeedViewModel
 
     ModalBottomSheetLayout(
         sheetContent = {
-            BottomSheetContent(onFilterChanged = {
+            BottomSheetContent(filter = filter, onFilterChanged = {
                 viewModel.updateFilter(it)
                 scope.launch {
                     modalBottomSheetState.hide()
@@ -168,7 +169,7 @@ private fun PopularNewsFeed(popularArticles: List<NewsArticle>) {
 }
 
 @Composable
-fun BottomSheetContent(onFilterChanged: (String) -> Unit) {
+fun BottomSheetContent(onFilterChanged: (String) -> Unit, filter: String) {
     ChipGroup(
         modifier = Modifier
             .heightIn(min = 0.dp, max = 300.dp)
@@ -178,6 +179,7 @@ fun BottomSheetContent(onFilterChanged: (String) -> Unit) {
         onSelectedChanged = {
             onFilterChanged(it)
         },
+        selectedItem = filter
     )
 }
 
