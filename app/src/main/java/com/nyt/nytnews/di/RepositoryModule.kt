@@ -1,9 +1,9 @@
 package com.nyt.nytnews.di
 
-import com.nyt.nytnews.data.repository.NewsRepository
 import com.nyt.nytnews.data.repository.NewsRepositoryImpl
-import com.nyt.nytnews.data.repository.UserRepo
 import com.nyt.nytnews.data.repository.UserRepoImpl
+import com.nyt.nytnews.domain.repository.NewsRepository
+import com.nyt.nytnews.domain.repository.UserRepo
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

@@ -3,8 +3,8 @@ package com.nyt.nytnews.ui.screens.login
 import android.util.Patterns
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.nyt.nytnews.data.db.models.User
-import com.nyt.nytnews.data.repository.UserRepo
+import com.nyt.nytnews.domain.models.User
+import com.nyt.nytnews.domain.use_cases.LoginUseCase
 import com.nyt.nytnews.session.SessionManager
 import com.nyt.nytnews.utils.ResponseIo
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,7 +19,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val userRepo: UserRepo,
+    private val loginUseCase: LoginUseCase,
     private val sessionManager: SessionManager
 ) : ViewModel() {
 
@@ -38,7 +38,7 @@ class LoginViewModel @Inject constructor(
             try {
                 _loginResponse.update { ResponseIo.Loading }
                 delay(2000)
-                val user = userRepo.loginUser(email, password)!!
+                val user = loginUseCase(email = email, password = password)!!
                 Timber.d("Login response: $user")
                 sessionManager.user = user
                 _loginResponse.update { ResponseIo.Data(user) }

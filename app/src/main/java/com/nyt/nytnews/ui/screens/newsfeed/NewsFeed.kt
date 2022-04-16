@@ -22,7 +22,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.nyt.nytnews.R
-import com.nyt.nytnews.models.NewsArticle
+import com.nyt.nytnews.domain.models.NewsArticle
 import com.nyt.nytnews.ui.composables.ChipGroup
 import com.nyt.nytnews.ui.navigation.NytNavigationAction
 import com.nyt.nytnews.ui.theme.BaseSeparation

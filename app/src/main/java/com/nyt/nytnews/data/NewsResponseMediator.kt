@@ -7,16 +7,16 @@ import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
 import com.nyt.nytnews.data.db.NytDatabase
 import com.nyt.nytnews.data.db.entities.RemoteKeys
-import com.nyt.nytnews.data.mapper.NewsArticleDbMapper
 import com.nyt.nytnews.data.network.NytApiService
-import com.nyt.nytnews.models.NewsArticle
+import com.nyt.nytnews.data.network.dto.toArticleEntities
+import com.nyt.nytnews.domain.models.NewsArticle
+import kotlinx.serialization.SerializationException
 import retrofit2.HttpException
 import timber.log.Timber
 import java.io.IOException
 
 @OptIn(ExperimentalPagingApi::class)
 class NewsResponseMediator(
-    private val mapper: NewsArticleDbMapper,
     private val apiService: NytApiService,
     private val nytDatabase: NytDatabase,
     private val filter: String?,
@@ -73,7 +73,7 @@ class NewsResponseMediator(
 
         try {
             val apiResponse = apiService.loadNews(pageKey = page, filter = filter, query = query)
-            val articles = mapper.mapFromEntities(apiResponse.response.articles)
+            val articles = apiResponse.toArticleEntities()
             val endOfPaginationReached = articles.isEmpty()
             nytDatabase.withTransaction {
                 // clear all tables in the database
@@ -91,8 +91,13 @@ class NewsResponseMediator(
             }
             return MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
         } catch (exception: IOException) {
+            exception.printStackTrace()
             return MediatorResult.Error(exception)
         } catch (exception: HttpException) {
+            exception.printStackTrace()
+            return MediatorResult.Error(exception)
+        } catch (exception: SerializationException) {
+            exception.printStackTrace()
             return MediatorResult.Error(exception)
         }
     }

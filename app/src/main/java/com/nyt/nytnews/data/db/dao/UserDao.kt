@@ -5,7 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.nyt.nytnews.data.db.entities.UserEntity
-import com.nyt.nytnews.data.db.models.User
+import com.nyt.nytnews.domain.models.User
 
 @Dao
 interface UserDao {
