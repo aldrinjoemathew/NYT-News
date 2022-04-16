@@ -7,15 +7,15 @@ import androidx.room.RoomDatabase
 import com.nyt.nytnews.data.db.dao.NewsArticleDao
 import com.nyt.nytnews.data.db.dao.RemoteKeysDao
 import com.nyt.nytnews.data.db.dao.UserDao
-import com.nyt.nytnews.data.db.entities.NewsArticleDbEntity
-import com.nyt.nytnews.data.db.entities.RemoteKeys
+import com.nyt.nytnews.data.db.entities.NewsArticleEntity
+import com.nyt.nytnews.data.db.entities.RemoteKeyEntity
 import com.nyt.nytnews.data.db.entities.UserEntity
 
 @Database(
     entities = [
         UserEntity::class,
-        NewsArticleDbEntity::class,
-        RemoteKeys::class
+        NewsArticleEntity::class,
+        RemoteKeyEntity::class
     ],
     version = 6,
     exportSchema = false

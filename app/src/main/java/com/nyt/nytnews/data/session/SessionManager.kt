@@ -1,4 +1,4 @@
-package com.nyt.nytnews.session
+package com.nyt.nytnews.data.session
 
 import android.content.SharedPreferences
 import com.nyt.nytnews.domain.models.User

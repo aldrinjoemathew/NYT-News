@@ -1,6 +1,6 @@
 package com.nyt.nytnews.data.network.dto
 
-import com.nyt.nytnews.data.db.entities.NewsArticleDbEntity
+import com.nyt.nytnews.data.db.entities.NewsArticleEntity
 import com.nyt.nytnews.domain.models.NewsArticle
 import com.nyt.nytnews.domain.models.NewsResponse
 import kotlinx.serialization.SerialName
@@ -40,7 +40,7 @@ fun ArticleSearchDto.toNewsResponse(): NewsResponse {
     )
 }
 
-fun ArticleSearchDto.toArticleEntities(): List<NewsArticleDbEntity> {
+fun ArticleSearchDto.toArticleEntities(): List<NewsArticleEntity> {
     return response.docs.map {
         it.toNewArticleEntity()
     }

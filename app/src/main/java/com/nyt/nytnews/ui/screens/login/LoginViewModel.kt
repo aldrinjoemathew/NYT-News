@@ -4,8 +4,9 @@ import android.util.Patterns
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nyt.nytnews.domain.models.User
+import com.nyt.nytnews.domain.use_cases.GetUserSessionUseCase
 import com.nyt.nytnews.domain.use_cases.LoginUseCase
-import com.nyt.nytnews.session.SessionManager
+import com.nyt.nytnews.domain.use_cases.UpdateUserSessionUseCase
 import com.nyt.nytnews.utils.ResponseIo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -20,7 +21,8 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
-    private val sessionManager: SessionManager
+    private val getUserSessionUseCase: GetUserSessionUseCase,
+    private val updateUserSessionUseCase: UpdateUserSessionUseCase,
 ) : ViewModel() {
 
     private val _loginResponse = MutableStateFlow<ResponseIo<User>>(ResponseIo.Empty)
@@ -28,7 +30,7 @@ class LoginViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            val user = sessionManager.user
+            val user = getUserSessionUseCase()
             if (user != null) _loginResponse.update { ResponseIo.Data(user) }
         }
     }
@@ -40,7 +42,7 @@ class LoginViewModel @Inject constructor(
                 delay(2000)
                 val user = loginUseCase(email = email, password = password)!!
                 Timber.d("Login response: $user")
-                sessionManager.user = user
+                updateUserSessionUseCase(user)
                 _loginResponse.update { ResponseIo.Data(user) }
             } catch (e: Exception) {
                 e.printStackTrace()

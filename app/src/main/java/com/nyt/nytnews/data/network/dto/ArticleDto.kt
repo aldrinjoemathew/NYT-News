@@ -1,7 +1,7 @@
 package com.nyt.nytnews.data.network.dto
 
 import com.nyt.nytnews.data.LongTimestampToMillisSerializer
-import com.nyt.nytnews.data.db.entities.NewsArticleDbEntity
+import com.nyt.nytnews.data.db.entities.NewsArticleEntity
 import com.nyt.nytnews.domain.models.NewsArticle
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -159,8 +159,8 @@ fun ArticleDto.toNewsArticle(): NewsArticle {
     )
 }
 
-fun ArticleDto.toNewArticleEntity(): NewsArticleDbEntity {
-    return NewsArticleDbEntity(
+fun ArticleDto.toNewArticleEntity(): NewsArticleEntity {
+    return NewsArticleEntity(
         id = id,
         abstractContent = abstractContent,
         headline = headline.main,

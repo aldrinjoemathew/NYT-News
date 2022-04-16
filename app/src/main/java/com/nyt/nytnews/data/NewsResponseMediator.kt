@@ -6,7 +6,7 @@ import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
 import com.nyt.nytnews.data.db.NytDatabase
-import com.nyt.nytnews.data.db.entities.RemoteKeys
+import com.nyt.nytnews.data.db.entities.RemoteKeyEntity
 import com.nyt.nytnews.data.network.NytApiService
 import com.nyt.nytnews.data.network.dto.toArticleEntities
 import com.nyt.nytnews.domain.models.NewsArticle
@@ -84,7 +84,7 @@ class NewsResponseMediator(
                 val prevKey = if (page == STARTING_PAGE_INDEX) null else page - 1
                 val nextKey = if (endOfPaginationReached) null else page + 1
                 val keys = articles.map {
-                    RemoteKeys(repoId = it.id, prevKey = prevKey, nextKey = nextKey)
+                    RemoteKeyEntity(repoId = it.id, prevKey = prevKey, nextKey = nextKey)
                 }
                 nytDatabase.remoteKeysDao().insertAll(keys)
                 nytDatabase.newsArticleDao().insertAll(articles)
@@ -102,7 +102,7 @@ class NewsResponseMediator(
         }
     }
 
-    private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, NewsArticle>): RemoteKeys? {
+    private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, NewsArticle>): RemoteKeyEntity? {
         // Get the last page that was retrieved, that contained items.
         // From that last page, get the last item
         return state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull()
@@ -112,7 +112,7 @@ class NewsResponseMediator(
             }
     }
 
-    private suspend fun getRemoteKeyForFirstItem(state: PagingState<Int, NewsArticle>): RemoteKeys? {
+    private suspend fun getRemoteKeyForFirstItem(state: PagingState<Int, NewsArticle>): RemoteKeyEntity? {
         // Get the first page that was retrieved, that contained items.
         // From that first page, get the first item
         return state.pages.firstOrNull { it.data.isNotEmpty() }?.data?.firstOrNull()
@@ -124,7 +124,7 @@ class NewsResponseMediator(
 
     private suspend fun getRemoteKeyClosestToCurrentPosition(
         state: PagingState<Int, NewsArticle>
-    ): RemoteKeys? {
+    ): RemoteKeyEntity? {
         // The paging library is trying to load data after the anchor position
         // Get the item closest to the anchor position
         return state.anchorPosition?.let { position ->
