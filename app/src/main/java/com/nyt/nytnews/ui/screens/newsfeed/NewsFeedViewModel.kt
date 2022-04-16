@@ -2,28 +2,31 @@ package com.nyt.nytnews.ui.screens.newsfeed
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import androidx.paging.map
-import com.nyt.nytnews.models.NewsArticle
-import com.nyt.nytnews.data.repository.NewsRepository
+import com.nyt.nytnews.domain.models.NewsArticle
+import com.nyt.nytnews.domain.use_cases.ArticleSearchUseCase
+import com.nyt.nytnews.domain.use_cases.PopularArticlesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
-class NewsFeedViewModel @Inject constructor(private val newsRepository: NewsRepository) :
+class NewsFeedViewModel @Inject constructor(
+    private val articleSearchUseCase: ArticleSearchUseCase,
+    private val popularArticlesUseCase: PopularArticlesUseCase
+) :
     ViewModel() {
 
     var filter = MutableStateFlow("")
 
     private val _isRefreshing = MutableStateFlow(false)
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     private val _newsArticles = filter.flatMapLatest {
-        newsRepository.newsFlow(filter = it)
+        articleSearchUseCase(filter = it)
     }.cachedIn(viewModelScope)
     val newsArticles = _newsArticles
 
@@ -41,13 +44,6 @@ class NewsFeedViewModel @Inject constructor(private val newsRepository: NewsRepo
                 if (refreshing) loadPopularArticles()
             }
         }
-        viewModelScope.launch(Dispatchers.IO) {
-            newsRepository.newsFlow().map {
-                it.map {
-                    Timber.d("${it.timestamp} ${it.headline}")
-                }
-            }.shareIn(viewModelScope, SharingStarted.Eagerly).collect()
-        }
     }
 
     fun updateRefreshing(isRefreshing: Boolean) {
@@ -57,7 +53,7 @@ class NewsFeedViewModel @Inject constructor(private val newsRepository: NewsRepo
     private fun loadPopularArticles() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val popularArticles = newsRepository.popularArticles()
+                val popularArticles = popularArticlesUseCase()
                 _popularArticles.update { popularArticles }
             } catch (e: Exception) {
                 e.printStackTrace()

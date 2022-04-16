@@ -6,7 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.nyt.nytnews.data.db.entities.NewsArticleDbEntity
-import com.nyt.nytnews.models.NewsArticle
+import com.nyt.nytnews.domain.models.NewsArticle
 
 @Dao
 interface NewsArticleDao {

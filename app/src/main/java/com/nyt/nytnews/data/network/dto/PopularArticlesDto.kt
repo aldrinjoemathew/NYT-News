@@ -1,25 +1,26 @@
-package com.nyt.nytnews.data.network.models
+package com.nyt.nytnews.data.network.dto
 
 import com.nyt.nytnews.data.LongToStringSerializer
 import com.nyt.nytnews.data.ShortTimestampToMillisSerializer
+import com.nyt.nytnews.domain.models.NewsArticle
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 
 @Serializable
-data class PopularNewsResponseEntity(
+data class PopularArticleSearchDto(
     @SerialName("copyright")
     val copyright: String,
     @SerialName("num_results")
     val numResults: Int,
     @SerialName("results")
-    val results: List<PopularArticle>,
+    val results: List<PopularArticleDto>,
     @SerialName("status")
     val status: String
 )
 
 @Serializable
-data class PopularArticle(
+data class PopularArticleDto(
     @SerialName("abstract")
     val `abstract`: String,
     @SerialName("adx_keywords")
@@ -93,3 +94,23 @@ data class MediaMetadata(
     @SerialName("width")
     val width: Int
 )
+
+fun PopularArticleDto.toNewsArticle(): NewsArticle {
+    return NewsArticle(
+        id = id,
+        abstractContent = abstract,
+        headline = title,
+        imageUrl = media?.firstOrNull { it.type == "image" || it.subtype == "photo" }
+            ?.mediaMetadata?.maxByOrNull { it.width }?.url ?: "",
+        leadContent = abstract,
+        newsSource = source,
+        url = url,
+        timestamp = publishedDate
+    )
+}
+
+fun PopularArticleSearchDto.toNewsArticles(): List<NewsArticle> {
+    return results.map {
+        it.toNewsArticle()
+    }
+}

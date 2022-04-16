@@ -1,4 +1,4 @@
-package com.nyt.nytnews.data.db.models
+package com.nyt.nytnews.domain.models
 
 import androidx.room.ColumnInfo
 import kotlinx.serialization.Serializable

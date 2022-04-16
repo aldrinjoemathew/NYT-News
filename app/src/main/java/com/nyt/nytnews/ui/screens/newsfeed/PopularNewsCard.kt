@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.nyt.nytnews.R
-import com.nyt.nytnews.models.NewsArticle
+import com.nyt.nytnews.domain.models.NewsArticle
 import com.nyt.nytnews.ui.theme.BaseSeparation
 
 @Composable

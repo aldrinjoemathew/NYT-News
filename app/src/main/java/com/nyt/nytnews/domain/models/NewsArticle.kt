@@ -1,4 +1,4 @@
-package com.nyt.nytnews.models
+package com.nyt.nytnews.domain.models
 
 import androidx.room.ColumnInfo
 
