@@ -1,5 +1,7 @@
 package com.nyt.nytnews.data.network.models
 
+import com.nyt.nytnews.data.LongToStringSerializer
+import com.nyt.nytnews.data.ShortTimestampToMillisSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -33,7 +35,8 @@ data class PopularArticle(
     @SerialName("geo_facet")
     val geoFacet: List<String>,
     @SerialName("id")
-    val id: Long,
+    @Serializable(with = LongToStringSerializer::class)
+    val id: String,
     @SerialName("media")
     val media: List<Media>?,
     @SerialName("nytdsection")
@@ -43,7 +46,8 @@ data class PopularArticle(
     @SerialName("per_facet")
     val perFacet: List<String>,
     @SerialName("published_date")
-    val publishedDate: String,
+    @Serializable(with = ShortTimestampToMillisSerializer::class)
+    val publishedDate: Long,
     @SerialName("section")
     val section: String,
     @SerialName("source")

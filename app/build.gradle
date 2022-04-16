@@ -83,6 +83,7 @@ dependencies {
     implementation "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0"
 
     implementation "androidx.paging:paging-compose:1.0.0-alpha14"
+    implementation "androidx.room:room-paging:2.4.2"
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
