@@ -71,7 +71,7 @@ fun PopularNewsCard(
                     style = MaterialTheme.typography.body2
                 )
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-                    BookmarkButton(isBookmarked = false, onToggle = { onToggleBookmark() })
+                    BookmarkButton(isBookmarked = article.isBookmarked, onToggle = { onToggleBookmark() })
                     ShareButton(onShare = { onShare() })
                 }
             }

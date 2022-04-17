@@ -15,4 +15,8 @@ interface NewsRepository {
     fun newsFlow(filter: String? = null, query: String? = null): Flow<PagingData<NewsArticle>>
 
     suspend fun popularArticles(): List<NewsArticle>
+
+    suspend fun updateBookmark(articleId: String, isBookmarked: Boolean)
+
+    fun getBookmarkedArticles(): Flow<List<NewsArticle>>
 }

@@ -2,6 +2,7 @@ package com.nyt.nytnews.data.network.dto
 
 import com.nyt.nytnews.data.LongToStringSerializer
 import com.nyt.nytnews.data.ShortTimestampToMillisSerializer
+import com.nyt.nytnews.data.db.entities.ArticleType
 import com.nyt.nytnews.domain.models.NewsArticle
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -105,7 +106,9 @@ fun PopularArticleDto.toNewsArticle(): NewsArticle {
         leadContent = abstract,
         newsSource = source,
         url = url,
-        timestamp = publishedDate
+        timestamp = publishedDate,
+        isBookmarked = false,
+        articleType = ArticleType.NetworkData
     )
 }
 

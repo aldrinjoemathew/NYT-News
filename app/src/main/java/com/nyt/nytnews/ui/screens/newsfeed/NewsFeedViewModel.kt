@@ -6,6 +6,7 @@ import androidx.paging.cachedIn
 import com.nyt.nytnews.domain.models.NewsArticle
 import com.nyt.nytnews.domain.use_cases.ArticleSearchUseCase
 import com.nyt.nytnews.domain.use_cases.PopularArticlesUseCase
+import com.nyt.nytnews.domain.use_cases.UpdateBookmarkUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -16,7 +17,8 @@ import javax.inject.Inject
 @HiltViewModel
 class NewsFeedViewModel @Inject constructor(
     private val articleSearchUseCase: ArticleSearchUseCase,
-    private val popularArticlesUseCase: PopularArticlesUseCase
+    private val popularArticlesUseCase: PopularArticlesUseCase,
+    private val updateBookmarkUseCase: UpdateBookmarkUseCase
 ) :
     ViewModel() {
 
@@ -58,6 +60,12 @@ class NewsFeedViewModel @Inject constructor(
             } catch (e: Exception) {
                 e.printStackTrace()
             }
+        }
+    }
+
+    fun toggleFavorite(article: NewsArticle) {
+        viewModelScope.launch(Dispatchers.IO) {
+            updateBookmarkUseCase(articleId = article.id, isBookmarked = !article.isBookmarked)
         }
     }
 }

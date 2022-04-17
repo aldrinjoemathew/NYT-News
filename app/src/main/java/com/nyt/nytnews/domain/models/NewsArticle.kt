@@ -1,6 +1,7 @@
 package com.nyt.nytnews.domain.models
 
 import androidx.room.ColumnInfo
+import com.nyt.nytnews.data.db.entities.ArticleType
 
 data class NewsArticle(
     @ColumnInfo(name = "id")
@@ -18,5 +19,9 @@ data class NewsArticle(
     @ColumnInfo(name = "title")
     val headline: String,
     @ColumnInfo(name = "pub_date")
-    val timestamp: Long
+    val timestamp: Long,
+    @ColumnInfo(name = "bookmark")
+    val isBookmarked: Boolean,
+    @ColumnInfo(name = "article_type")
+    val articleType: ArticleType
 )

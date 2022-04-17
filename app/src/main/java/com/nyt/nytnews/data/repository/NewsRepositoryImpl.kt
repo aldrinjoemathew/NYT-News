@@ -48,4 +48,12 @@ class NewsRepositoryImpl @Inject constructor(
         val response = apiService.loadPopularArticles()
         return response.toNewsArticles()
     }
+
+    override suspend fun updateBookmark(articleId: String, isBookmarked: Boolean) {
+        database.newsArticleDao().updateBookmark(articleId, isBookmarked)
+    }
+
+    override fun getBookmarkedArticles(): Flow<List<NewsArticle>> {
+        return database.newsArticleDao().fetchFavorites()
+    }
 }

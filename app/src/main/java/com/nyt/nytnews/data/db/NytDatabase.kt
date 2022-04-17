@@ -4,9 +4,11 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import com.nyt.nytnews.data.db.dao.NewsArticleDao
 import com.nyt.nytnews.data.db.dao.RemoteKeysDao
 import com.nyt.nytnews.data.db.dao.UserDao
+import com.nyt.nytnews.data.db.entities.ArticleTypeConverter
 import com.nyt.nytnews.data.db.entities.NewsArticleEntity
 import com.nyt.nytnews.data.db.entities.RemoteKeyEntity
 import com.nyt.nytnews.data.db.entities.UserEntity
@@ -17,9 +19,10 @@ import com.nyt.nytnews.data.db.entities.UserEntity
         NewsArticleEntity::class,
         RemoteKeyEntity::class
     ],
-    version = 6,
+    version = 7,
     exportSchema = false
 )
+@TypeConverters(ArticleTypeConverter::class)
 abstract class NytDatabase : RoomDatabase() {
     companion object {
         fun buildDatabase(context: Context) =
