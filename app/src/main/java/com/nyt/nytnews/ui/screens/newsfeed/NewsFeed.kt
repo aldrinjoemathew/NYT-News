@@ -1,9 +1,12 @@
 package com.nyt.nytnews.ui.screens.newsfeed
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -12,6 +15,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -27,6 +31,7 @@ import com.nyt.nytnews.ui.composables.ChipGroup
 import com.nyt.nytnews.ui.navigation.NytNavigationAction
 import com.nyt.nytnews.ui.theme.BaseSeparation
 import com.nyt.nytnews.ui.theme.HalfBaseSeparation
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -39,48 +44,50 @@ fun NewsFeed(navigationAction: NytNavigationAction, viewModel: NewsFeedViewModel
     val popularArticles by viewModel.popularArticles.collectAsState()
     val filter by viewModel.filter.collectAsState()
 
-    if (newsArticles.itemCount == 0 && newsArticles.loadState.refresh is LoadState.NotLoading ) return
+    if (newsArticles.itemCount == 0 && newsArticles.loadState.refresh is LoadState.NotLoading) return
 
     viewModel.updateRefreshing(newsArticles.loadState.refresh is LoadState.Loading)
 
     ModalBottomSheetLayout(
         sheetContent = {
-            BottomSheetContent(filter = filter, onFilterChanged = {
-                viewModel.updateFilter(it)
-                scope.launch {
-                    modalBottomSheetState.hide()
-                }
-            })
+            BottomSheetContent(
+                filterItems = stringArrayResource(id = R.array.news_filters).toList(),
+                selectedFilter = filter,
+                onFilterChanged = {
+                    viewModel.updateFilter(it)
+                    scope.launch {
+                        modalBottomSheetState.hide()
+                    }
+                })
         },
         sheetState = modalBottomSheetState,
         sheetShape = RoundedCornerShape(topStart = HalfBaseSeparation, topEnd = HalfBaseSeparation),
         sheetBackgroundColor = MaterialTheme.colors.background,
     ) {
-        Scaffold(
-            floatingActionButton = {
-                FloatingActionButton(onClick = {
-                    scope.launch {
-                        if (modalBottomSheetState.isVisible) {
-                            modalBottomSheetState.hide()
-                        } else {
-                            modalBottomSheetState.show()
-                        }
-                    }
-                }) {
-                    Icon(
-                        painter = rememberAsyncImagePainter(model = R.drawable.ic_baseline_filter_alt_24),
-                        tint = MaterialTheme.colors.onSecondary,
-                        contentDescription = stringResource(R.string.filter)
-                    )
-                }
-            },
-        ) { padding ->
+        Scaffold { padding ->
             SwipeRefresh(
                 state = rememberSwipeRefreshState(isRefreshing = newsArticles.loadState.refresh == LoadState.Loading),
                 onRefresh = {
                     newsArticles.refresh()
                 }) {
-                ArticleFeed(padding, popularArticles, newsArticles)
+                ArticleFeed(
+                    padding,
+                    popularArticles,
+                    newsArticles,
+                    filterItems = stringArrayResource(id = R.array.news_filters).toList(),
+                    selectedFilter = filter,
+                    showFilter = {
+                        scope.launch {
+                            if (modalBottomSheetState.isVisible) {
+                                modalBottomSheetState.hide()
+                            } else {
+                                modalBottomSheetState.animateTo(ModalBottomSheetValue.Expanded)
+                            }
+                        }
+                    }, onFilterChanged = {
+                        viewModel.updateFilter(it)
+                    }
+                )
             }
         }
     }
@@ -90,7 +97,11 @@ fun NewsFeed(navigationAction: NytNavigationAction, viewModel: NewsFeedViewModel
 private fun ArticleFeed(
     padding: PaddingValues,
     popularArticles: List<NewsArticle>,
-    newsArticles: LazyPagingItems<NewsArticle>
+    newsArticles: LazyPagingItems<NewsArticle>,
+    filterItems: List<String>,
+    selectedFilter: String,
+    onFilterChanged: (String) -> Unit,
+    showFilter: () -> Unit
 ) {
     LazyColumn(
         modifier = Modifier
@@ -99,6 +110,38 @@ private fun ArticleFeed(
         horizontalAlignment = Alignment.CenterHorizontally,
         contentPadding = PaddingValues(HalfBaseSeparation),
     ) {
+        item {
+            LazyRow(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                item {
+                    Surface(
+                        modifier = Modifier
+                            .clickable { showFilter() }
+                            .padding(horizontal = HalfBaseSeparation),
+                        elevation = BaseSeparation,
+                        shape = CircleShape,
+                        color = MaterialTheme.colors.surface
+                    ) {
+                        Icon(
+                            modifier = Modifier.padding(HalfBaseSeparation),
+                            painter = painterResource(R.drawable.ic_baseline_filter_alt_24),
+                            contentDescription = stringResource(R.string.filter),
+                            tint = MaterialTheme.colors.onSurface
+                        )
+                    }
+                }
+                items(filterItems) { item ->
+                    com.nyt.nytnews.ui.composables.Chip(
+                        name = item,
+                        isSelected = selectedFilter == item,
+                        onSelectionChanged = {
+                            onFilterChanged(it)
+                        },
+                    )
+                }
+            }
+        }
         if (popularArticles.isNotEmpty()) {
             item {
                 PopularNewsFeed(popularArticles)
@@ -169,17 +212,19 @@ private fun PopularNewsFeed(popularArticles: List<NewsArticle>) {
 }
 
 @Composable
-fun BottomSheetContent(onFilterChanged: (String) -> Unit, filter: String) {
+fun BottomSheetContent(
+    onFilterChanged: (String) -> Unit,
+    filterItems: List<String>,
+    selectedFilter: String
+) {
     ChipGroup(
         modifier = Modifier
-            .heightIn(min = 0.dp, max = 300.dp)
-            .fillMaxWidth()
             .padding(BaseSeparation),
-        chipItems = stringArrayResource(id = R.array.news_filters).toList(),
+        chipItems = filterItems,
         onSelectedChanged = {
             onFilterChanged(it)
         },
-        selectedItem = filter
+        selectedItem = selectedFilter
     )
 }
 
