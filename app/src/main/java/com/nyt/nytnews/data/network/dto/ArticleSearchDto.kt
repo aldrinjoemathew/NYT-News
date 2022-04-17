@@ -42,6 +42,6 @@ fun ArticleSearchDto.toNewsResponse(): NewsResponse {
 
 fun ArticleSearchDto.toArticleEntities(): List<NewsArticleEntity> {
     return response.docs.map {
-        it.toNewArticleEntity()
+        it.toNewsArticleEntity()
     }
 }

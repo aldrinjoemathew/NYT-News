@@ -78,7 +78,7 @@ fun SimpleNewsCard(
                         .wrapContentHeight(),
                     horizontalArrangement = Arrangement.End
                 ) {
-                    BookmarkButton(isBookmarked = false, onToggle = { onToggleBookmark() })
+                    BookmarkButton(isBookmarked = article.isBookmarked, onToggle = { onToggleBookmark() })
                     ShareButton(onShare = { onShare() })
                 }
             }

@@ -102,6 +102,8 @@ fun NewsFeed(navigationAction: NytNavigationAction, viewModel: NewsFeedViewModel
                         }
                     }, onFilterChanged = {
                         viewModel.updateFilter(it)
+                    }, onToggleBookmark = {
+                        viewModel.toggleFavorite(it)
                     }
                 )
             }
@@ -117,7 +119,8 @@ private fun ArticleFeed(
     filterItems: List<String>,
     selectedFilter: String,
     onFilterChanged: (String) -> Unit,
-    showFilter: () -> Unit
+    showFilter: () -> Unit,
+    onToggleBookmark: (NewsArticle) -> Unit,
 ) {
     LazyColumn(
         modifier = Modifier
@@ -160,7 +163,7 @@ private fun ArticleFeed(
         }
         if (popularArticles.isNotEmpty()) {
             item {
-                PopularNewsFeed(popularArticles)
+                PopularNewsFeed(popularArticles, onToggleBookmark = { onToggleBookmark(it) })
             }
         }
         items(newsArticles.itemCount) { index ->
@@ -173,14 +176,18 @@ private fun ArticleFeed(
                             .wrapContentHeight(),
                         article = article,
                         navigateToArticle = { },
-                        onToggleBookmark = { },
+                        onToggleBookmark = {
+                            onToggleBookmark(article)
+                        },
                         onShare = { }
                     )
                 else
                     SimpleNewsCard(
                         article = article,
                         navigateToArticle = { },
-                        onToggleBookmark = { },
+                        onToggleBookmark = {
+                            onToggleBookmark(article)
+                        },
                         onShare = { }
                     )
             }
@@ -203,7 +210,10 @@ private fun ArticleFeed(
 }
 
 @Composable
-private fun PopularNewsFeed(popularArticles: List<NewsArticle>) {
+private fun PopularNewsFeed(
+    popularArticles: List<NewsArticle>,
+    onToggleBookmark: (NewsArticle) -> Unit
+) {
     Column {
         Spacer(modifier = Modifier.height(BaseSeparation))
         Text(text = stringResource(R.string.popular_stories), style = MaterialTheme.typography.h5)
@@ -219,7 +229,7 @@ private fun PopularNewsFeed(popularArticles: List<NewsArticle>) {
                         .width(280.dp),
                     article = article,
                     navigateToArticle = { },
-                    onToggleBookmark = { },
+                    onToggleBookmark = { onToggleBookmark(article) },
                     onShare = { }
                 )
             }
@@ -247,7 +257,7 @@ fun BottomSheetContent(
                 fontWeight = FontWeight.Bold
             )
             OutlinedButton(
-                modifier= Modifier.size(40.dp),
+                modifier = Modifier.size(40.dp),
                 onClick = closeFilter,
                 shape = CircleShape,
                 contentPadding = PaddingValues(0.dp),

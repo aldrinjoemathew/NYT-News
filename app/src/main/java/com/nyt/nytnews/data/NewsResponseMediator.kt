@@ -6,6 +6,7 @@ import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
 import com.nyt.nytnews.data.db.NytDatabase
+import com.nyt.nytnews.data.db.entities.ArticleType
 import com.nyt.nytnews.data.db.entities.RemoteKeyEntity
 import com.nyt.nytnews.data.network.NytApiService
 import com.nyt.nytnews.data.network.dto.toArticleEntities
@@ -79,7 +80,8 @@ class NewsResponseMediator(
                 // clear all tables in the database
                 if (loadType == LoadType.REFRESH) {
                     nytDatabase.remoteKeysDao().clearRemoteKeys()
-                    nytDatabase.newsArticleDao().clearRepos()
+                    nytDatabase.newsArticleDao().deleteNonBookmarkedArticles()
+                    nytDatabase.newsArticleDao().updateArticlesAsLocalCopy()
                 }
                 val prevKey = if (page == STARTING_PAGE_INDEX) null else page - 1
                 val nextKey = if (endOfPaginationReached) null else page + 1
@@ -87,7 +89,15 @@ class NewsResponseMediator(
                     RemoteKeyEntity(repoId = it.id, prevKey = prevKey, nextKey = nextKey)
                 }
                 nytDatabase.remoteKeysDao().insertAll(keys)
-                nytDatabase.newsArticleDao().insertAll(articles)
+                val localCopies = nytDatabase.newsArticleDao().fetchAllArticles()
+                val bookmarkedArticles = articles.filter { remote ->
+                    localCopies.any { local ->
+                        remote.id == local.id
+                    }
+                }
+                val commonUpdated = bookmarkedArticles.map { it.copy(isBookmarked = true, articleType = ArticleType.NetworkData) }
+                nytDatabase.newsArticleDao().replaceAll(commonUpdated)
+                nytDatabase.newsArticleDao().insertAll(articles.minus(bookmarkedArticles))
             }
             return MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
         } catch (exception: IOException) {
