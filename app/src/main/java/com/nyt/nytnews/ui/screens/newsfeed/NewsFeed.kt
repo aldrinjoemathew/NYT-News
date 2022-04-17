@@ -38,7 +38,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun NewsFeed(navigationAction: NytNavigationAction, viewModel: NewsFeedViewModel) {
     val modalBottomSheetState =
-        rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
+        rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden, skipHalfExpanded = true)
     val scope = rememberCoroutineScope()
     val newsArticles = viewModel.newsArticles.collectAsLazyPagingItems()
     val popularArticles by viewModel.popularArticles.collectAsState()
@@ -81,7 +81,7 @@ fun NewsFeed(navigationAction: NytNavigationAction, viewModel: NewsFeedViewModel
                             if (modalBottomSheetState.isVisible) {
                                 modalBottomSheetState.hide()
                             } else {
-                                modalBottomSheetState.animateTo(ModalBottomSheetValue.Expanded)
+                                modalBottomSheetState.show()
                             }
                         }
                     }, onFilterChanged = {
