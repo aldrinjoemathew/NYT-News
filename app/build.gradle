@@ -53,10 +53,12 @@ dependencies {
     //Compose
     implementation "androidx.compose.material:material:1.1.1"
     implementation "io.coil-kt:coil-compose:2.0.0-rc03"
+    implementation "androidx.compose.material3:material3:1.0.0-alpha09"
 
     def accompanist_version = "0.24.6-alpha"
     implementation "com.google.accompanist:accompanist-flowlayout:$accompanist_version"
     implementation "com.google.accompanist:accompanist-swiperefresh:$accompanist_version"
+    implementation "com.google.accompanist:accompanist-systemuicontroller:$accompanist_version"
 
     //Hilt
     implementation "com.google.dagger:hilt-android:$hilt_version"

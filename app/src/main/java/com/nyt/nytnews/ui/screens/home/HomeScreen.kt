@@ -1,18 +1,24 @@
 package com.nyt.nytnews.ui.screens.home
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -30,9 +36,19 @@ fun HomeScreen(
 
     val bottomNavController = rememberNavController()
     Scaffold(modifier = Modifier.fillMaxSize(), topBar = {
-        TopAppBar(title = {
-            Text(text = stringResource(R.string.app_name))
-        })
+        CenterAlignedTopAppBar(
+            colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                containerColor = MaterialTheme.colors.primarySurface,
+            ),
+            title = {
+                Image(
+                    modifier = Modifier.wrapContentSize(),
+                    painter = painterResource(id = R.drawable.ic_newyorktimes),
+                    contentDescription = "New york times",
+                    alignment = Alignment.Center,
+                    colorFilter = ColorFilter.tint(contentColorFor(backgroundColor = MaterialTheme.colors.primarySurface))
+                )
+            })
     }, bottomBar = {
         BottomNavigationBar(navController = bottomNavController)
     }) { padding ->
