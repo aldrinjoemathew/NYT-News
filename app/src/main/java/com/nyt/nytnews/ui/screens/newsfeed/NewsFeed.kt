@@ -1,5 +1,6 @@
 package com.nyt.nytnews.ui.screens.newsfeed
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -52,6 +53,12 @@ fun NewsFeed(navigationAction: NytNavigationAction, viewModel: NewsFeedViewModel
     if (newsArticles.itemCount == 0 && newsArticles.loadState.refresh is LoadState.NotLoading) return
 
     viewModel.updateRefreshing(newsArticles.loadState.refresh is LoadState.Loading)
+
+    BackHandler(enabled = modalBottomSheetState.isVisible) {
+        scope.launch {
+            modalBottomSheetState.hide()
+        }
+    }
 
     ModalBottomSheetLayout(
         sheetContent = {
