@@ -28,8 +28,8 @@ interface NewsArticleDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun replaceAll(articles: List<NewsArticleEntity>): Void
 
-    @Query("SELECT id, abstract, url, lead_para, source, image_url, title, pub_date, bookmark, article_type FROM news_articles ORDER BY `pub_date` DESC")
-    fun newsArticles(): PagingSource<Int, NewsArticle>
+    @Query("SELECT id, abstract, url, lead_para, source, image_url, title, pub_date, bookmark, article_type FROM news_articles WHERE article_type == :articleType ORDER BY `pub_date` DESC")
+    fun newsArticles(articleType: ArticleType = ArticleType.NetworkData): PagingSource<Int, NewsArticle>
 
     @Query("SELECT id, abstract, url, lead_para, source, image_url, title, pub_date, bookmark, article_type FROM news_articles ORDER BY `pub_date` DESC")
     fun newsArticlesList(): List<NewsArticle>
