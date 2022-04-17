@@ -9,6 +9,8 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Close
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -18,11 +20,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import coil.compose.rememberAsyncImagePainter
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.nyt.nytnews.R
@@ -31,14 +34,16 @@ import com.nyt.nytnews.ui.composables.ChipGroup
 import com.nyt.nytnews.ui.navigation.NytNavigationAction
 import com.nyt.nytnews.ui.theme.BaseSeparation
 import com.nyt.nytnews.ui.theme.HalfBaseSeparation
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun NewsFeed(navigationAction: NytNavigationAction, viewModel: NewsFeedViewModel) {
     val modalBottomSheetState =
-        rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden, skipHalfExpanded = true)
+        rememberModalBottomSheetState(
+            initialValue = ModalBottomSheetValue.Hidden,
+            skipHalfExpanded = true
+        )
     val scope = rememberCoroutineScope()
     val newsArticles = viewModel.newsArticles.collectAsLazyPagingItems()
     val popularArticles by viewModel.popularArticles.collectAsState()
@@ -58,10 +63,14 @@ fun NewsFeed(navigationAction: NytNavigationAction, viewModel: NewsFeedViewModel
                     scope.launch {
                         modalBottomSheetState.hide()
                     }
+                }, closeFilter = {
+                    scope.launch {
+                        modalBottomSheetState.hide()
+                    }
                 })
         },
         sheetState = modalBottomSheetState,
-        sheetShape = RoundedCornerShape(topStart = HalfBaseSeparation, topEnd = HalfBaseSeparation),
+        sheetShape = RoundedCornerShape(0),
         sheetBackgroundColor = MaterialTheme.colors.background,
     ) {
         Scaffold { padding ->
@@ -214,17 +223,44 @@ private fun PopularNewsFeed(popularArticles: List<NewsArticle>) {
 @Composable
 fun BottomSheetContent(
     onFilterChanged: (String) -> Unit,
+    closeFilter: () -> Unit,
     filterItems: List<String>,
     selectedFilter: String
 ) {
-    ChipGroup(
-        modifier = Modifier
-            .padding(BaseSeparation),
-        chipItems = filterItems,
-        onSelectedChanged = {
-            onFilterChanged(it)
-        },
-        selectedItem = selectedFilter
-    )
+    Column {
+        Row(
+            modifier = Modifier.padding(BaseSeparation),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                modifier = Modifier.weight(1f),
+                textAlign = TextAlign.Center,
+                text = stringResource(R.string.choose_filter),
+                style = MaterialTheme.typography.subtitle1,
+                fontWeight = FontWeight.Bold
+            )
+            OutlinedButton(
+                modifier= Modifier.size(40.dp),
+                onClick = closeFilter,
+                shape = CircleShape,
+                contentPadding = PaddingValues(0.dp),
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.Close,
+                    contentDescription = stringResource(R.string.cd_close_filter)
+                )
+            }
+            Spacer(modifier = Modifier.width(BaseSeparation))
+        }
+        ChipGroup(
+            modifier = Modifier
+                .padding(BaseSeparation),
+            chipItems = filterItems,
+            onSelectedChanged = {
+                onFilterChanged(it)
+            },
+            selectedItem = selectedFilter
+        )
+    }
 }
 
