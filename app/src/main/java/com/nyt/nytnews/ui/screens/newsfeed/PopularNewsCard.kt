@@ -18,6 +18,7 @@ import coil.request.ImageRequest
 import com.nyt.nytnews.R
 import com.nyt.nytnews.domain.models.NewsArticle
 import com.nyt.nytnews.ui.theme.BaseSeparation
+import com.nyt.nytnews.ui.theme.HalfBaseSeparation
 
 @Composable
 fun PopularNewsCard(
@@ -77,4 +78,5 @@ fun PopularNewsCard(
             }
         }
     }
+    Spacer(modifier = Modifier.height(HalfBaseSeparation))
 }
