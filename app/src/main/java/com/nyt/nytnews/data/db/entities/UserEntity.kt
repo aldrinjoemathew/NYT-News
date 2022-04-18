@@ -18,4 +18,6 @@ data class UserEntity(
     val password: String,
     @ColumnInfo(name = "dob")
     val dob: String,
+    @ColumnInfo(name = "image_path")
+    val imagePath: String
 )

@@ -4,6 +4,7 @@ import com.nyt.nytnews.data.db.dao.UserDao
 import com.nyt.nytnews.data.db.entities.UserEntity
 import com.nyt.nytnews.domain.models.User
 import com.nyt.nytnews.domain.repository.UserRepo
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class UserRepoImpl @Inject constructor(private val userDao: UserDao) : UserRepo {
@@ -14,7 +15,8 @@ class UserRepoImpl @Inject constructor(private val userDao: UserDao) : UserRepo 
                 name = name,
                 email = email,
                 password = password,
-                dob = ""
+                dob = "",
+                imagePath = ""
             )
         )
         return userDao.loginUser(email, password)
@@ -22,6 +24,10 @@ class UserRepoImpl @Inject constructor(private val userDao: UserDao) : UserRepo 
 
     override suspend fun loginUser(email: String, password: String): User? {
         return userDao.loginUser(email, password)
+    }
+
+    override fun getUserInfo(email: String): Flow<User?> {
+        return userDao.getUserInfo(email)
     }
 
 }

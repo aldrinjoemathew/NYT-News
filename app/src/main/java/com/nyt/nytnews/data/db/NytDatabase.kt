@@ -19,7 +19,7 @@ import com.nyt.nytnews.data.db.entities.UserEntity
         NewsArticleEntity::class,
         RemoteKeyEntity::class
     ],
-    version = 7,
+    version = 8,
     exportSchema = false
 )
 @TypeConverters(ArticleTypeConverter::class)

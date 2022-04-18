@@ -11,10 +11,13 @@
     <string name="tf_email">Email</string>
     <string name="cd_brand_image">Brand Image</string>
     <string name="tf_name">Name</string>
+    <string name="tf_dob">Date of Birth</string>
     <string name="btn_signup">Signup</string>
     <string name="close">Close</string>
     <string name="cd_close_filter">Close filter</string>
     <string name="choose_filter">Choose a filter</string>
+    <string name="profile_image">Profile image</string>
+    <string name="nil">Nil</string>
 
     <string-array name="news_filters">
         <item>Arts</item>
