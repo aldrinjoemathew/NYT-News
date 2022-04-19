@@ -7,10 +7,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Favorite
-import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Person
-import androidx.compose.material.icons.outlined.Star
+import androidx.compose.material.icons.rounded.Favorite
+import androidx.compose.material.icons.rounded.Home
+import androidx.compose.material.icons.rounded.Person
+import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -39,7 +39,7 @@ fun HomeScreen(
     Scaffold(modifier = Modifier.fillMaxSize(), topBar = {
         CenterAlignedTopAppBar(
             colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                containerColor = MaterialTheme.colors.primarySurface,
+                containerColor = MaterialTheme.colors.surface,
             ),
             title = {
                 Image(
@@ -47,7 +47,7 @@ fun HomeScreen(
                     painter = painterResource(id = R.drawable.ic_newyorktimes),
                     contentDescription = "New york times",
                     alignment = Alignment.Center,
-                    colorFilter = ColorFilter.tint(contentColorFor(backgroundColor = MaterialTheme.colors.primarySurface))
+                    colorFilter = ColorFilter.tint(contentColorFor(backgroundColor = MaterialTheme.colors.surface))
                 )
             })
     }, bottomBar = {
@@ -72,20 +72,14 @@ fun BottomNavigationBar(navController: NavController) {
             NavigationItem.Profile
         )
     BottomNavigation(
-        backgroundColor = MaterialTheme.colors.primarySurface,
-        contentColor = contentColorFor(backgroundColor = MaterialTheme.colors.primarySurface)
+        backgroundColor = MaterialTheme.colors.surface,
+        contentColor = contentColorFor(backgroundColor = MaterialTheme.colors.surface)
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
         bottomNavItems.forEach { item ->
             BottomNavigationItem(
                 icon = { Icon(imageVector = item.icon, contentDescription = item.title) },
-                selectedContentColor = contentColorFor(
-                    backgroundColor = MaterialTheme.colors.primarySurface
-                ),
-                unselectedContentColor = contentColorFor(
-                    backgroundColor = MaterialTheme.colors.primarySurface
-                ).copy(0.6f),
                 selected = currentRoute == item.route,
                 onClick = {
                     navController.navigate(item.route) {
@@ -104,10 +98,10 @@ fun BottomNavigationBar(navController: NavController) {
 }
 
 sealed class NavigationItem(var route: String, var icon: ImageVector, var title: String) {
-    object NewsFeed : NavigationItem(NavRoutes.NEWS_FEED, Icons.Outlined.Home, "Home")
-    object Favorites : NavigationItem(NavRoutes.FAVORITES, Icons.Outlined.Favorite, "Favorites")
-    object Profile : NavigationItem(NavRoutes.PROFILE, Icons.Outlined.Person, "Profile")
+    object NewsFeed : NavigationItem(NavRoutes.NEWS_FEED, Icons.Rounded.Home, "Home")
+    object Favorites : NavigationItem(NavRoutes.FAVORITES, Icons.Rounded.Favorite, "Favorites")
+    object Profile : NavigationItem(NavRoutes.PROFILE, Icons.Rounded.Person, "Profile")
     object NewArticle :
-        NavigationItem(NavRoutes.USER_ARTICLES, Icons.Outlined.Star, "User articles")
+        NavigationItem(NavRoutes.USER_ARTICLES, Icons.Rounded.Star, "User articles")
 }
 

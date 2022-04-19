@@ -37,21 +37,12 @@ fun NytApp() {
         NytNavigationAction(navController)
     }
     val systemUiController = rememberSystemUiController()
-    if (isSystemInDarkTheme()) {
-        systemUiController.setSystemBarsColor(
-            color = MaterialTheme.colors.primarySurface
-        )
-        systemUiController.setNavigationBarColor(
-            color = MaterialTheme.colors.primarySurface
-        )
-    } else {
-        systemUiController.setSystemBarsColor(
-            color = MaterialTheme.colors.primaryVariant
-        )
-        systemUiController.setNavigationBarColor(
-            color = MaterialTheme.colors.primaryVariant
-        )
-    }
+    systemUiController.setSystemBarsColor(
+        color = MaterialTheme.colors.surface
+    )
+    systemUiController.setNavigationBarColor(
+        color = MaterialTheme.colors.surface
+    )
     NytNavigationGraph(
         navController = navController,
         navigationAction = navigationActions
