@@ -1,5 +1,6 @@
 package com.nyt.nytnews.ui.composables
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -11,6 +12,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.google.accompanist.flowlayout.FlowCrossAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.MainAxisAlignment
@@ -28,8 +30,9 @@ fun Chip(
     Surface(
         modifier = Modifier.padding(HalfBaseSeparation),
         elevation = BaseSeparation,
-        shape = MaterialTheme.shapes.medium,
-        color = chipColor
+        shape = MaterialTheme.shapes.large,
+        color = chipColor,
+        border = BorderStroke(1.dp, contentColorFor(backgroundColor = chipColor))
     ) {
         Row(modifier = Modifier
             .toggleable(
@@ -42,7 +45,7 @@ fun Chip(
             Text(
                 text = name,
                 style = MaterialTheme.typography.body2,
-                color = MaterialTheme.colors.contentColorFor(chipColor),
+                color = contentColorFor(chipColor),
                 modifier = Modifier.padding(BaseSeparation)
             )
         }
