@@ -5,6 +5,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -21,9 +22,9 @@ import com.nyt.nytnews.ui.theme.NytTheme
 @Composable
 fun NewArticle(navigationAction: NytNavigationAction, viewModel: NewArticleViewModel) {
     val scrollState = rememberScrollState()
-    var title by remember { mutableStateOf("") }
-    var abstractContent by remember { mutableStateOf("") }
-    var content by remember { mutableStateOf("") }
+    var title by rememberSaveable { mutableStateOf("") }
+    var abstractContent by rememberSaveable { mutableStateOf("") }
+    var content by rememberSaveable { mutableStateOf("") }
     val createArticleInProgress by viewModel.createArticleInProgress.collectAsState()
 
     if (createArticleInProgress == NewArticleViewModel.ArticleCreationProgress.Complete)
