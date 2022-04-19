@@ -80,8 +80,8 @@ class NewsResponseMediator(
                 // clear all tables in the database
                 if (loadType == LoadType.REFRESH) {
                     nytDatabase.remoteKeysDao().clearRemoteKeys()
-                    nytDatabase.newsArticleDao().deleteNonBookmarkedArticles()
-                    nytDatabase.newsArticleDao().updateArticlesAsLocalCopy()
+                    nytDatabase.newsArticleDao().deleteNonBookmarkedNonUserArticles()
+                    nytDatabase.newsArticleDao().updateRemoteArticlesAsLocalCopy()
                 }
                 val prevKey = if (page == STARTING_PAGE_INDEX) null else page - 1
                 val nextKey = if (endOfPaginationReached) null else page + 1
@@ -95,7 +95,12 @@ class NewsResponseMediator(
                         remote.id == local.id
                     }
                 }
-                val commonUpdated = bookmarkedArticles.map { it.copy(isBookmarked = true, articleType = ArticleType.NetworkData) }
+                val commonUpdated = bookmarkedArticles.map {
+                    it.copy(
+                        isBookmarked = true,
+                        articleType = ArticleType.NetworkData
+                    )
+                }
                 nytDatabase.newsArticleDao().replaceAll(commonUpdated)
                 nytDatabase.newsArticleDao().insertAll(articles.minus(bookmarkedArticles))
             }

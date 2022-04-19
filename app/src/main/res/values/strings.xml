@@ -18,6 +18,7 @@
     <string name="choose_filter">Choose a filter</string>
     <string name="profile_image">Profile image</string>
     <string name="nil">Nil</string>
+    <string name="save">Save</string>
 
     <string-array name="news_filters">
         <item>Arts</item>

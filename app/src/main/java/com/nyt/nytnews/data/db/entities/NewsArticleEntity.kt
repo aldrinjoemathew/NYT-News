@@ -31,7 +31,7 @@ data class NewsArticleEntity(
 )
 
 enum class ArticleType {
-    LocalCopy, NetworkData
+    LocalCopy, NetworkData, UserArticle
 }
 
 class ArticleTypeConverter {

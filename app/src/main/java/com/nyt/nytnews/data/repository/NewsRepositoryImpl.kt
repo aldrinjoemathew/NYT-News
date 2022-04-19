@@ -6,6 +6,8 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.nyt.nytnews.data.NewsResponseMediator
 import com.nyt.nytnews.data.db.NytDatabase
+import com.nyt.nytnews.data.db.entities.ArticleType
+import com.nyt.nytnews.data.db.entities.NewsArticleEntity
 import com.nyt.nytnews.data.network.NytApiService
 import com.nyt.nytnews.data.network.dto.toNewsArticles
 import com.nyt.nytnews.data.network.dto.toNewsResponse
@@ -13,6 +15,7 @@ import com.nyt.nytnews.domain.models.NewsArticle
 import com.nyt.nytnews.domain.models.NewsResponse
 import com.nyt.nytnews.domain.repository.NewsRepository
 import kotlinx.coroutines.flow.Flow
+import java.util.*
 import javax.inject.Inject
 
 class NewsRepositoryImpl @Inject constructor(
@@ -55,5 +58,33 @@ class NewsRepositoryImpl @Inject constructor(
 
     override fun getBookmarkedArticles(): Flow<List<NewsArticle>> {
         return database.newsArticleDao().fetchFavorites()
+    }
+
+    override suspend fun createUserArticle(
+        title: String,
+        abstractContent: String,
+        content: String
+    ) {
+        val newArticle = NewsArticleEntity(
+            isBookmarked = false,
+            articleType = ArticleType.UserArticle,
+            timestamp = System.currentTimeMillis(),
+            imageUrl = "",
+            id = UUID.randomUUID().toString(),
+            abstractContent = abstractContent,
+            headline = title,
+            leadContent = content,
+            newsSource = "",
+            url = ""
+        )
+        database.newsArticleDao().insertArticle(newArticle)
+    }
+
+    override fun getUserArticles(): Flow<List<NewsArticle>> {
+        return database.newsArticleDao().getUserArticles()
+    }
+
+    override fun deleteArticle(articleId: String) {
+        database.newsArticleDao().deleteArticle(articleId)
     }
 }

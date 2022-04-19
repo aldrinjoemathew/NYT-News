@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.nyt.nytnews.ui.screens.home.HomeScreen
 import com.nyt.nytnews.ui.screens.login.LoginScreen
+import com.nyt.nytnews.ui.screens.new_article.NewArticle
 import com.nyt.nytnews.ui.screens.signup.SignupScreen
 
 @Composable
@@ -23,6 +24,9 @@ fun NytNavigationGraph(
         }
         composable(NavRoutes.HOME) {
             HomeScreen(navController = navController, navigationAction = navigationAction)
+        }
+        composable(NavRoutes.NEW_ARTICLE) {
+            NewArticle(navigationAction = navigationAction, viewModel = hiltViewModel())
         }
     }
 }

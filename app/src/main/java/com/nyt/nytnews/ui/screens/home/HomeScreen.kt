@@ -10,6 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -64,7 +65,12 @@ fun HomeScreen(
 @Composable
 fun BottomNavigationBar(navController: NavController) {
     val bottomNavItems =
-        listOf(NavigationItem.NewsFeed, NavigationItem.Favorites, NavigationItem.Profile)
+        listOf(
+            NavigationItem.NewsFeed,
+            NavigationItem.Favorites,
+            NavigationItem.NewArticle,
+            NavigationItem.Profile
+        )
     BottomNavigation(
         backgroundColor = MaterialTheme.colors.primarySurface,
         contentColor = contentColorFor(backgroundColor = MaterialTheme.colors.primarySurface)
@@ -101,5 +107,7 @@ sealed class NavigationItem(var route: String, var icon: ImageVector, var title:
     object NewsFeed : NavigationItem(NavRoutes.NEWS_FEED, Icons.Outlined.Home, "Home")
     object Favorites : NavigationItem(NavRoutes.FAVORITES, Icons.Outlined.Favorite, "Favorites")
     object Profile : NavigationItem(NavRoutes.PROFILE, Icons.Outlined.Person, "Profile")
+    object NewArticle :
+        NavigationItem(NavRoutes.USER_ARTICLES, Icons.Outlined.Star, "User articles")
 }
 

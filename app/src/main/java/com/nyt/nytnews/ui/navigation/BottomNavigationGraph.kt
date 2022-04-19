@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import com.nyt.nytnews.ui.screens.favorites.Favorites
 import com.nyt.nytnews.ui.screens.newsfeed.NewsFeed
 import com.nyt.nytnews.ui.screens.profile.Profile
+import com.nyt.nytnews.ui.screens.user_articles.UserArticlesScreen
 
 @Composable
 fun BottomNavigationGraph(
@@ -23,6 +24,9 @@ fun BottomNavigationGraph(
         }
         composable(NavRoutes.PROFILE) {
             Profile(navigationAction = navigationAction, viewModel = hiltViewModel())
+        }
+        composable(NavRoutes.USER_ARTICLES) {
+            UserArticlesScreen(navigationAction = navigationAction, viewModel = hiltViewModel())
         }
     }
 }

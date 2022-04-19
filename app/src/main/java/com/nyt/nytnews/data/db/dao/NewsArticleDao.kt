@@ -16,14 +16,23 @@ interface NewsArticleDao {
     @Query("DELETE FROM news_articles")
     suspend fun deleteAll(): Int
 
-    @Query("DELETE FROM news_articles WHERE bookmark == :bookmark")
-    suspend fun deleteNonBookmarkedArticles(bookmark: Boolean = false): Int
+    @Query("DELETE FROM news_articles WHERE bookmark == :bookmark AND article_type != :articleType")
+    suspend fun deleteNonBookmarkedNonUserArticles(
+        bookmark: Boolean = false,
+        articleType: ArticleType = ArticleType.UserArticle
+    ): Int
 
-    @Query("UPDATE news_articles SET article_type = :articleType")
-    suspend fun updateArticlesAsLocalCopy(articleType: ArticleType = ArticleType.LocalCopy)
+    @Query("UPDATE news_articles SET article_type = :articleTypeTo WHERE article_type == :articleTypeFrom")
+    suspend fun updateRemoteArticlesAsLocalCopy(
+        articleTypeFrom: ArticleType = ArticleType.NetworkData,
+        articleTypeTo: ArticleType = ArticleType.LocalCopy,
+    )
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertAll(articles: List<NewsArticleEntity>): Void
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertArticle(article: NewsArticleEntity): Void
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun replaceAll(articles: List<NewsArticleEntity>): Void
@@ -42,4 +51,13 @@ interface NewsArticleDao {
 
     @Query("SELECT id, abstract, url, lead_para, source, image_url, title, pub_date, bookmark, article_type FROM news_articles WHERE bookmark == :bookmark ORDER BY `pub_date` DESC")
     fun fetchFavorites(bookmark: Boolean = true): Flow<List<NewsArticle>>
+
+    @Query(
+        "SELECT id, abstract, url, lead_para, source, image_url, title, pub_date, bookmark, article_type " +
+                "FROM news_articles WHERE article_type == :articleType ORDER BY `pub_date` DESC"
+    )
+    fun getUserArticles(articleType: ArticleType = ArticleType.UserArticle): Flow<List<NewsArticle>>
+
+    @Query("DELETE FROM news_articles WHERE id == :articleId")
+    fun deleteArticle(articleId: String)
 }

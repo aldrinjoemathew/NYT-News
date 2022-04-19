@@ -13,4 +13,10 @@ class NytNavigationAction(navController: NavController) {
     val navigateToSignup: () -> Unit = {
         navController.navigate(NavRoutes.SIGNUP)
     }
+    val navigateCreateUserArticleScreen: () -> Unit = {
+        navController.navigate(NavRoutes.NEW_ARTICLE)
+    }
+    val popBackstack: () -> Unit = {
+        navController.popBackStack()
+    }
 }

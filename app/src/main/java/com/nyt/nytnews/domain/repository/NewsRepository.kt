@@ -19,4 +19,10 @@ interface NewsRepository {
     suspend fun updateBookmark(articleId: String, isBookmarked: Boolean)
 
     fun getBookmarkedArticles(): Flow<List<NewsArticle>>
+
+    suspend fun createUserArticle(title: String, abstractContent: String, content: String)
+
+    fun getUserArticles(): Flow<List<NewsArticle>>
+
+    fun deleteArticle(articleId: String)
 }
