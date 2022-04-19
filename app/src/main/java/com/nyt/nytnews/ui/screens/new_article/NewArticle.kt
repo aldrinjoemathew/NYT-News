@@ -4,6 +4,10 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -33,7 +37,30 @@ fun NewArticle(navigationAction: NytNavigationAction, viewModel: NewArticleViewM
         })
 
     Scaffold(
-        modifier = Modifier.padding(HalfBaseSeparation)
+        modifier = Modifier.padding(HalfBaseSeparation),
+        topBar = {
+            CenterAlignedTopAppBar(
+                navigationIcon = {
+                    IconButton(onClick = { navigationAction.popBackstack() }) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = "Go back"
+                        )
+                    }
+                },
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = MaterialTheme.colors.surface,
+                ),
+                title = {
+                    Text(
+                        modifier = Modifier
+                            .wrapContentHeight()
+                            .padding(BaseSeparation),
+                        text = "Create a new article!",
+                        style = MaterialTheme.typography.h6
+                    )
+                })
+        }
     ) { padding ->
         Column {
             Column(
@@ -43,13 +70,7 @@ fun NewArticle(navigationAction: NytNavigationAction, viewModel: NewArticleViewM
                     .verticalScroll(scrollState),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(
-                    modifier = Modifier
-                        .wrapContentHeight()
-                        .padding(BaseSeparation),
-                    text = "Create a new article!",
-                    style = MaterialTheme.typography.h4
-                )
+
                 NewArticleLabel(labelText = "Title")
                 NewArticleField(
                     modifier = Modifier.height(50.dp),
