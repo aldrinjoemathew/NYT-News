@@ -74,14 +74,12 @@ fun BottomNavigationBar(navController: NavController) {
         bottomNavItems.forEach { item ->
             BottomNavigationItem(
                 icon = { Icon(imageVector = item.icon, contentDescription = item.title) },
-                label = { Text(text = item.title) },
                 selectedContentColor = contentColorFor(
                     backgroundColor = MaterialTheme.colors.primarySurface
                 ),
                 unselectedContentColor = contentColorFor(
                     backgroundColor = MaterialTheme.colors.primarySurface
                 ).copy(0.6f),
-                alwaysShowLabel = true,
                 selected = currentRoute == item.route,
                 onClick = {
                     navController.navigate(item.route) {
