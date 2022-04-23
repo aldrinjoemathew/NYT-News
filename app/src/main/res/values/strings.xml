@@ -1,3 +1,91 @@
 <resources>
     <string name="app_name">NYT News</string>
+    <string name="filter">Filter</string>
+    <string name="popular_stories">Popular stories</string>
+    <string name="refresh">Refresh</string>
+    <string name="share_article">Share article</string>
+    <string name="action_retry">Retry</string>
+    <string name="action_signup">Click here to signup!</string>
+    <string name="btn_action_login">Login</string>
+    <string name="tf_password">Password</string>
+    <string name="tf_email">Email</string>
+    <string name="cd_brand_image">Brand Image</string>
+    <string name="tf_name">Name</string>
+    <string name="tf_dob">Date of Birth</string>
+    <string name="btn_signup">Signup</string>
+    <string name="close">Close</string>
+    <string name="cd_close_filter">Close filter</string>
+    <string name="choose_filter">Choose a filter</string>
+    <string name="profile_image">Profile image</string>
+    <string name="nil">Nil</string>
+    <string name="save">Save</string>
+
+    <string-array name="news_filters">
+        <item>Arts</item>
+        <item>Automobiles</item>
+        <item>Autos</item>
+        <item>Blogs</item>
+        <item>Books</item>
+        <item>Booming</item>
+        <item>Business</item>
+        <item>Business Day</item>
+        <item>Corrections</item>
+        <item>Crosswords &amp; Games</item>
+        <item>Crosswords/Games</item>
+        <item>Dining &amp; Wine</item>
+        <item>Dining and Wine</item>
+        <item>Editors\' Notes</item>
+        <item>Education</item>
+        <item>Fashion &amp; Style</item>
+        <item>Food</item>
+        <item>Front Page</item>
+        <item>Giving</item>
+        <item>Global Home</item>
+        <item>Great Homes &amp; Destinations</item>
+        <item>Great Homes and Destinations</item>
+        <item>Health</item>
+        <item>Home &amp; Garden</item>
+        <item>Home and Garden</item>
+        <item>International Home</item>
+        <item>Job Market</item>
+        <item>Learning</item>
+        <item>Magazine</item>
+        <item>Movies</item>
+        <item>Multimedia</item>
+        <item>Multimedia/Photos</item>
+        <item>NYRegion</item>
+        <item>NYT Now</item>
+        <item>National</item>
+        <item>New York</item>
+        <item>New York and Region</item>
+        <item>Obituaries</item>
+        <item>Olympics</item>
+        <item>Open</item>
+        <item>Opinion</item>
+        <item>Paid Death Notices</item>
+        <item>Public Editor</item>
+        <item>Real Estate</item>
+        <item>Science</item>
+        <item>Sports</item>
+        <item>Style</item>
+        <item>Sunday Magazine</item>
+        <item>Sunday Review</item>
+        <item>T Magazine</item>
+        <item>T:Style</item>
+        <item>Technology</item>
+        <item>The Public Editor</item>
+        <item>The Upshot</item>
+        <item>Theater</item>
+        <item>Times Topics</item>
+        <item>TimesMachine</item>
+        <item>Today\'s Headlines</item>
+        <item>Topics</item>
+        <item>Travel</item>
+        <item>U.S.</item>
+        <item>Universal</item>
+        <item>UrbanEye</item>
+        <item>Washington</item>
+        <item>Week in Review</item>
+        <item>World</item>
+    </string-array>
 </resources>
